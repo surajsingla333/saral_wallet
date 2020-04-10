@@ -101,6 +101,7 @@ class New extends Component {
           private: result.privateKey,
           pkh: result.publicKeyHash,
           mnemonic: result.mnemonic,
+          storeType: result.storeType,
           gotoPassword: true,
         })
         // this.state.public = result.publicKey;

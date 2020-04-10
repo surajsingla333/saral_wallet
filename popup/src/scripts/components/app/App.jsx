@@ -74,16 +74,16 @@ class App extends Component {
   }
 
   body() {
-    if (this.state.cookieName) {
-      return (<Body />)
-    }
-    else {
-      if (!this.props.data) {
-        return (<Signup />);
+    if (this.props.data) {
+      if (this.state.cookieName) {
+        return (<Body />)
       }
-      else if (this.props.data) {
+      else {
         return (<Login />);
       }
+    }
+    else {
+      return (<Signup />);
     }
   }
 

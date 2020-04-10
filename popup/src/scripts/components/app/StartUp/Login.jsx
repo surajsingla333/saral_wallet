@@ -110,6 +110,9 @@ class Login extends Component {
       Cookies.set("name", this.props.data.accounts[0].name, {
         expires: inThirtyMinutes
       });
+      Cookies.set("storeType", this.props.data.accounts[0].storeType, {
+        expires: inThirtyMinutes
+      });
 
       this.setState({
         loggedIn: true,

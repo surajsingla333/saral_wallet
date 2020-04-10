@@ -1,4 +1,4 @@
-import { TezosWalletUtil } from 'conseiljs';
+import { TezosWalletUtil, StoreType } from 'conseiljs';
 // const faucetAccount = {
 //   "mnemonic": ["boil", "enable", "pyramid", "slim", "bright", "frost", "wait", "banner", "leisure", "put", "lunch", "fresh", "junk", "float", "total"
 //   ],
@@ -26,9 +26,10 @@ export const initAccount = async function (faucetAccount) {
   //   return Promise.resolve("Invalid Wallet File");
   // })
   try {
-    const keystore = await TezosWalletUtil.unlockFundraiserIdentity(faucetAccount.mnemonic.join(' '), faucetAccount.email, faucetAccount.password, faucetAccount.pkh);
+    var keystore = await TezosWalletUtil.unlockFundraiserIdentity(faucetAccount.mnemonic.join(' '), faucetAccount.email, faucetAccount.password, faucetAccount.pkh);
     console.log(`public key: ${keystore.publicKey}`);
     console.log(`secret key: ${keystore.privateKey}`);
+    keystore['storeType'] = StoreType.Fundraiser;
     // alert("PUB" + `${keystore.publicKey}` + "\nPRIV", `${keystore.privateKey}`);
     return (keystore);
   }

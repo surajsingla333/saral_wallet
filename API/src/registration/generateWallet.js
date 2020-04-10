@@ -1,4 +1,4 @@
-import { TezosWalletUtil } from 'conseiljs';
+import { TezosWalletUtil, StoreType } from 'conseiljs';
 // const faucetAccount = {
 //   "mnemonic": ["boil", "enable", "pyramid", "slim", "bright", "frost", "wait", "banner", "leisure", "put", "lunch", "fresh", "junk", "float", "total"
 //   ],
@@ -43,6 +43,7 @@ export const generateAccount = async function (userMnemonic = "", type) {
     console.log(`secret key: ${keystore.privateKey}`);
     console.log("KEYSTORE BEFORE MNEMONIC", keystore);
     keystore['mnemonic'] = mnemonic;
+    keystore['storeType'] = StoreType.Mnemonic;
     console.log("KEYSTORE AFTER MNEMONIC", keystore);
     return (keystore);
   }

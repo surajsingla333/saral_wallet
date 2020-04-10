@@ -107,6 +107,7 @@ class Json extends Component {
           private: result.privateKey,
           pkh: result.publicKeyHash,
           mnemonic: obj.mnemonic.join().split(",").join(" "),
+          storeType: result.storeType,
           gotoPassword: true
         })
 

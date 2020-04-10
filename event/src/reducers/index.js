@@ -3,9 +3,13 @@ import {combineReducers} from 'redux';
 import count from './count';
 import file from './saveFile';
 import account from './account';
-import saveAccount from './storeAccount';
+import saveAccount from './storeAccounts';
 import getLocalStorage from './getStorage';
 import getNetwork from './network';
+import acivate from './activateStatus';
+import reveal from './revealStatus';
+import saveWallet from './storeWallet';
+
 
 export default combineReducers({
   count: count,
@@ -14,4 +18,7 @@ export default combineReducers({
   saveAccount: saveAccount,
   getLocalStorage: getLocalStorage,
   getNetwork: getNetwork,
+  acivate: acivate,
+  reveal: reveal,
+  saveWallet: saveWallet
 });

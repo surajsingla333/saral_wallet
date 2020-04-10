@@ -9,6 +9,7 @@ import { genHash, checkHash } from '../../../../../../API/src/encryption/encrypt
 import { encryptKeys } from '../../../../../../API/src/encryption/encryptAES';
 import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
 import Body from '../Body';
+import Cookies from 'js-cookie';
 
 class Password extends Component {
 
@@ -119,12 +120,39 @@ class Password extends Component {
 
       var hashAndSalt = genHash(p);
 
-      this.setState({ private: priv, public: pub, pkh: pkh2, mnemonic: mnemo, hashArray: hashAndSalt, gotoBody: true });
+      this.setState({ private: priv, public: pub, pkh: pkh2, mnemonic: mnemo, hashArray: hashAndSalt, storeType: this.props.storeType, });
 
       setTimeout(() => {
         console.log("STATE AFTER ENCRYPTION", this.state);
         console.log("THIS PROPS INS SET PASSWORD", this.props);
         this.props.storeData(this.state);
+        
+
+        var inThirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000);
+
+        Cookies.set("password", p, {
+          expires: inThirtyMinutes
+        });
+        Cookies.set("pkh", this.props.pkh, {
+          expires: inThirtyMinutes
+        });
+        Cookies.set("publicKey", pub, {
+          expires: inThirtyMinutes
+        });
+        Cookies.set("privateKey", priv, {
+          expires: inThirtyMinutes
+        });
+        Cookies.set("name", "ACCOUNT 1", {
+          expires: inThirtyMinutes
+        });
+        Cookies.set("storeType", this.props.storeType, {
+          expires: inThirtyMinutes
+        });
+
+        this.setState({
+          loggedIn: true,
+          gotoBody: true
+        })
       }, 200);
 
       // var r = genHash(p); // generating hash
@@ -142,15 +170,13 @@ class Password extends Component {
       // console.log("AES DECRYPT", k, "\n", l);
     }
 
-
-
   }
 
   render() {
-    if(this.state.gotoBody){
+    if (this.state.gotoBody && this.state.loggedIn) {
       this.state.gotoBody = false;
-      return(
-        <Body/>
+      return (
+        <Body />
       )
     }
     return (
@@ -194,12 +220,13 @@ const mapStateToProps = (state) => {
     private: state.account.private,
     pkh: state.account.pkh,
     mnemonic: state.account.mnemonic,
+    storeType: state.account.storeType,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    storeData: (newState) => dispatch({ type: "SAVE_DATA", state: newState })
+    storeData: (newState) => dispatch({ type: "SAVE_WALLET", state: newState })
   }
 }
 

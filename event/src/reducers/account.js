@@ -3,6 +3,7 @@ const initialState = {
   private: "",
   pkh: "",
   mnemonic: "",
+  storeType: ''
 };
 
 export default (state = initialState, action) => {
@@ -16,7 +17,8 @@ export default (state = initialState, action) => {
         public: action.state.public,
         private: action.state.private,
         pkh: action.state.pkh,
-        mnemonic: action.state.mnemonic
+        mnemonic: action.state.mnemonic,
+        storeType: action.state.storeType,
       };
     default:
       return state;
