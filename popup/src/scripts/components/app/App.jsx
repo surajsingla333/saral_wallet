@@ -9,6 +9,8 @@ import Password from './Registration/Password';
 import Login from './StartUp/Login';
 
 import Cookies from 'js-cookie';
+import AddAccount from './Registration/AddAccount';
+import AddFundraiserAccount from './Registration/AddFundraiserAccount';
 
 class App extends Component {
 
@@ -17,6 +19,7 @@ class App extends Component {
 
     this.state = {
       cookieName: Cookies.get('name') ? Cookies.get('name') : "",
+      headerMenuAcc:false,
     }
 
   }
@@ -39,35 +42,34 @@ class App extends Component {
 
     Cookies.set('foo', 'bar')
 
-    // const { cookies } = this.props;
-    //setting a cookie
-    // cookies.set('name', 'Ross');
-    //getting a cookie
-    // cookies.get('name');
+  }
 
-    // this.setState({
-    //   name
-    // });
+  addAccount(e){
+    e.preventDefault();
+    this.setState({
+      headerMenuAcc: true,
+      headerMenuFundAcc: false,
+    })
+  }
 
-    // setInterval(() => {
-    //   this.setState({
-    //     count: this.state.count + 1
-    //   });
-    // }, 1000);
-
+  addFundraiserAccount(e){
+    e.preventDefault();
+    this.setState({
+      headerMenuFundAcc: true,
+      headerMenuAcc: false,
+    })
   }
 
   render() {
     return (
       <div>
-        <Header />
-        {/* <Body/> */}
+        <Header addAccount={this.addAccount.bind(this)} addFundraiserAccount={this.addFundraiserAccount.bind(this)}/>
+        
+        <Body>
         {this.body()}
+        {this.addAccSetting()}
+        </Body>
 
-        {/* <h1>{this.state.name}</h1> */}
-
-        {/* <Signup/> */}
-        {/* <Password /> */}
         <Footer />
       </div>
     );
@@ -76,7 +78,7 @@ class App extends Component {
   body() {
     if (this.props.data) {
       if (this.state.cookieName) {
-        return (<Body />)
+        return (<h1>Body</h1>)
       }
       else {
         return (<Login />);
@@ -84,6 +86,15 @@ class App extends Component {
     }
     else {
       return (<Signup />);
+    }
+  }
+
+  addAccSetting(){
+    if(this.state.headerMenuAcc){
+          return (<AddAccount />);
+    }
+    else if(this.state.headerMenuFundAcc){
+      return(<AddFundraiserAccount/>);
     }
   }
 

@@ -82,19 +82,29 @@ class Body extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Body</h1>
-        {Cookies.get("pkh")}
+      <div style={{ backgroundColor: "#ad62aa", padding: '10px' }}>
+        {this.props.children}
 
-        <Button variant="primary" ref="method" value="Json" onClick={this.activate.bind(this)}>
-          Activate Account
-        </Button>
-        <Button variant="primary" ref="method" value="Json" onClick={this.reveal.bind(this)}>
-          Reveal Account
-        </Button>
+        {Cookies.get("pkh")}
+        {this.buttons()}
 
       </div>
     );
+  }
+
+  buttons() {
+    if (Cookies.get("name")) {
+      return (
+        <div>
+          <Button variant="primary" ref="method" value="Json" onClick={this.activate.bind(this)}>
+            Activate Account
+        </Button>
+          <Button variant="primary" ref="method" value="Json" onClick={this.reveal.bind(this)}>
+            Reveal Account
+        </Button>
+        </div>
+      )
+    }
   }
 }
 const mapStateToProps = (state) => {

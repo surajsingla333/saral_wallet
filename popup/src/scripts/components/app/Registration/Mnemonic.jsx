@@ -170,7 +170,7 @@ class Mnemonic extends Component {
     return (
       <div>
         <h1>{this.props.file}</h1>
-        <h2>Enter your 15 words mnemonic pharse</h2>
+        <h2>Enter mnemonic pharse</h2>
         <Form onSubmit={this.createWallet.bind(this)}>
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Control as="textarea" rows="3" ref="mnemonic" />

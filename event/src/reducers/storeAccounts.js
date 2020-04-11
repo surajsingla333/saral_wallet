@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
         public: action.state.public,
         private: action.state.private,
         pkh: action.state.pkh,
-        mnemonic: "",
+        mnemonic: action.state.mnemonic,
         storeType: action.state.storeType
       };
 

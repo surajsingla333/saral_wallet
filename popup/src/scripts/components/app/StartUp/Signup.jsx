@@ -41,14 +41,17 @@ class Signup extends Component {
           <Card.Title>Saral Wallet</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">Choose Registration</Card.Subtitle>
           <Card.Text>
+          <Button variant="primary" ref="method" value="Mnemonic" onClick={(e) => { this.setState({ option: "MnemonicFundraiser" }) }}>
+              With Mnemonic (Fundraiser [will require fundraiser email and password])
+            </Button>
             <Button variant="primary" ref="method" value="Mnemonic" onClick={(e) => { this.setState({ option: "Mnemonic" }) }}>
-              With Mnemonic
+              With Mnemonic (Normal wallet)
             </Button>
             <Button variant="primary" ref="method" value="New" onClick={(e) => { this.setState({ option: "New" }) }}>
-              New Wallet
+              New Wallet (Mnemonic Wallet)
             </Button>
             <Button variant="primary" ref="method" value="Json" onClick={(e) => { this.setState({ option: "Json" }) }}>
-              With JSON File
+              With JSON File (Fundraiser)
             </Button>
           </Card.Text>
         </Card.Body>

@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
-import { restoreIdentityWithSecretKey } from '../../../../../../API/src/generateFromPk/account';
+import { unlockFundraiserIdentity } from '../../../../../../API/src/generatefromMnemonic/account';
 import { calling } from '../../../../../../API/src/TESTING/send';
 import { encryptKeys } from '../../../../../../API/src/encryption/encryptAES';
 import Body from '../Body';
@@ -72,6 +72,8 @@ class AddAccount extends Component {
     console.log("Getting from form", this.refs.privateKey);
 
     var k = this.refs.privateKey.value;
+    var pass = this.refs.password.value;
+    var email = this.refs.email.value;
 
     console.log(k.toString());
 
@@ -86,8 +88,7 @@ class AddAccount extends Component {
 
     setTimeout(async () => {
 
-      let result = await restoreIdentityWithSecretKey(k.toString());
-
+      let result = await unlockFundraiserIdentity(k.toString(), email.toString(), pass.toString());
       // localStorage.setItem("USER WALLET", rr);
       console.log("result", result);
       console.log("result", typeof (result));
@@ -95,19 +96,20 @@ class AddAccount extends Component {
       if (typeof (result) === 'object') {
 
         var p = Cookies.get('password');
-        console.log("PUBLIC", result.publicKeyHash);
-        console.log("PUBLIC", result.privateKey);
+        
+        console.log("PUBLICKEYHASH", result.publicKeyHash);
+        console.log("PRIVATE", result.privateKey);
         console.log("PUBLIC", result.publicKey);
 
         var pub = encryptKeys(result.publicKey, p);
         var priv = encryptKeys(result.privateKey, p);
         var pkh2 = encryptKeys(result.publicKeyHash, p);
-
+        var mnemo = encryptKeys(k.toString(), p);
 
         this.state.public = pub;
         this.state.private = priv;
         this.state.pkh = pkh2;
-        this.state.mnemonic = '';
+        this.state.mnemonic = mnemo;
         this.state.storeType = result.storeType;
 
 
@@ -119,7 +121,7 @@ class AddAccount extends Component {
 
         console.log("SENDING", this.state);
 
-        this.props.addAccountWithPK(this.state);
+        this.props.addFundraiserAccWithMnemonic(this.state);
 
         var inThirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000);
 
@@ -207,11 +209,20 @@ class AddAccount extends Component {
     return (
       <div>
         <h1>{this.props.file}</h1>
-        <h2>Enter the private key</h2>
+        <h2>Enter mnemonic</h2>
         <Form onSubmit={this.addAccount.bind(this)}>
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Control as="textarea" rows="3" ref="privateKey" />
           </Form.Group>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control type="email" placeholder="Enter email" ref="email" />
+          </Form.Group>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>password</Form.Label>
+            <Form.Control type="password" placeholder="Enter password" ref="password" />
+          </Form.Group>
+
           <Button variant="primary" type="submit">
             Submit
           </Button>
@@ -234,10 +245,15 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAccountWithPK: (newState) => dispatch({ type: "STORE_ACCOUNT", state: newState })
+    addFundraiserAccWithMnemonic: (newState) => dispatch({ type: "STORE_ACCOUNT", state: newState })
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddAccount);
 
 // deputy kitten mobile since nest art jelly bubble truck ensure uphold parent artwork sweet approve blur spider trigger wealth travel margin north law soda
+
+
+// search hawk raven mass lens goddess nice infant wrestle chaos air eagle throw person muscle
+// xoxrntzn.itknteka@tezos.example.org
+// Egfv8dVbfk

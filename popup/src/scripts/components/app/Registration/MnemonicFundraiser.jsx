@@ -3,14 +3,13 @@ import { Form, Button } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
-import { restoreIdentityWithSecretKey } from '../../../../../../API/src/generateFromPk/account';
+import { unlockFundraiserIdentity } from '../../../../../../API/src/generatefromMnemonic/account';
 import { calling } from '../../../../../../API/src/TESTING/send';
 import { encryptKeys } from '../../../../../../API/src/encryption/encryptAES';
-import Body from '../Body';
-import Cookies from 'js-cookie';
+import Password from './Password';
 
 
-class AddAccount extends Component {
+class MnemonicFundraiser extends Component {
 
   constructor(props) {
     super(props);
@@ -22,7 +21,7 @@ class AddAccount extends Component {
       private: "",
       pkh: "",
       mnemonic: "",
-      gotoBody: false
+      gotoPassword: false
     }
   }
 
@@ -72,6 +71,8 @@ class AddAccount extends Component {
     console.log("Getting from form", this.refs.privateKey);
 
     var k = this.refs.privateKey.value;
+    var pass = this.refs.password.value;
+    var email = this.refs.email.value;
 
     console.log(k.toString());
 
@@ -86,66 +87,38 @@ class AddAccount extends Component {
 
     setTimeout(async () => {
 
-      let result = await restoreIdentityWithSecretKey(k.toString());
-
+      let result = await unlockFundraiserIdentity(k.toString(), email.toString(), pass.toString());
       // localStorage.setItem("USER WALLET", rr);
       console.log("result", result);
       console.log("result", typeof (result));
 
       if (typeof (result) === 'object') {
 
-        var p = Cookies.get('password');
-        console.log("PUBLIC", result.publicKeyHash);
-        console.log("PUBLIC", result.privateKey);
+        
+        console.log("PUBLICKEYHASH", result.publicKeyHash);
+        console.log("PRIVATE", result.privateKey);
         console.log("PUBLIC", result.publicKey);
 
-        var pub = encryptKeys(result.publicKey, p);
-        var priv = encryptKeys(result.privateKey, p);
-        var pkh2 = encryptKeys(result.publicKeyHash, p);
 
+        // this.state.public = pub;
+        // this.state.private = priv;
+        // this.state.pkh = pkh2;
+        // this.state.mnemonic = mnemo;
+        // this.state.storeType = result.storeType;
 
-        this.state.public = pub;
-        this.state.private = priv;
-        this.state.pkh = pkh2;
-        this.state.mnemonic = '';
-        this.state.storeType = result.storeType;
-
-
-        // this.state.public = result.publicKey;
-        // this.state.private = result.privateKey;
-        // this.state.pkh = result.publicKeyHash;
-        // this.state.mnemonic = k.toString();
-        // this.state.gotoBody = true;
+        this.setState({
+        public: result.publicKey,
+        private: result.privateKey,
+        pkh: result.publicKeyHash,
+        mnemonic: k.toString(),
+        storeType: result.storeType,
+        gotoPassword: true,
+        })
 
         console.log("SENDING", this.state);
 
-        this.props.addAccountWithPK(this.state);
-
-        var inThirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000);
-
-        Cookies.set("password", p, {
-          expires: inThirtyMinutes
-        });
-        Cookies.set("pkh", result.publicKeyHash, {
-          expires: inThirtyMinutes
-        });
-        Cookies.set("publicKey", pub, {
-          expires: inThirtyMinutes
-        });
-        Cookies.set("privateKey", priv, {
-          expires: inThirtyMinutes
-        });
-        Cookies.set("name", `ACCOUNT ${(this.props.data.listAccountsNames.length) + 1}`, {
-          expires: inThirtyMinutes
-        });
-        Cookies.set("storeType", result.storeType, {
-          expires: inThirtyMinutes
-        });
-
-        this.setState({
-          gotoBody: true,
-        });
-
+        this.props.addFundraiserAccWithMnemonic(this.state);
+        
       }
       else if (typeof (result) === 'string') {
         this.state.error = true;
@@ -168,7 +141,7 @@ class AddAccount extends Component {
 
 
   gotoPass() {
-    this.setState({ gotoBody: true });
+    this.setState({ gotoPassword: true });
   }
 
   render() {
@@ -184,11 +157,11 @@ class AddAccount extends Component {
       );
     }
 
-    else if (this.state.gotoBody === true) {
-      this.state.gotoBody = false;
+    else if (this.state.gotoPassword === true) {
+      this.state.gotoPassword = false;
       console.log("GOING TO PASWORD")
       return (
-        <Body />
+        <Password />
       )
       // alert("WRONG JSON FILE");
     }
@@ -207,11 +180,20 @@ class AddAccount extends Component {
     return (
       <div>
         <h1>{this.props.file}</h1>
-        <h2>Enter the private key</h2>
+        <h2>Enter mnemonic phrase</h2>
         <Form onSubmit={this.addAccount.bind(this)}>
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Control as="textarea" rows="3" ref="privateKey" />
           </Form.Group>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Email of fundraiser account</Form.Label>
+            <Form.Control type="email" placeholder="Enter email" ref="email" />
+          </Form.Group>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>password of fundraiser account</Form.Label>
+            <Form.Control type="password" placeholder="Enter password" ref="password" />
+          </Form.Group>
+
           <Button variant="primary" type="submit">
             Submit
           </Button>
@@ -228,16 +210,20 @@ const mapStateToProps = (state) => {
   return {
     count: state.count.file,
     file: state.file.file,
-    data: state.getLocalStorage,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAccountWithPK: (newState) => dispatch({ type: "STORE_ACCOUNT", state: newState })
+    addFundraiserAccWithMnemonic: (newState) => dispatch({ type: "SAVE_ACCOUNT", state: newState })
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddAccount);
+export default connect(mapStateToProps, mapDispatchToProps)(MnemonicFundraiser);
 
 // deputy kitten mobile since nest art jelly bubble truck ensure uphold parent artwork sweet approve blur spider trigger wealth travel margin north law soda
+
+
+// search hawk raven mass lens goddess nice infant wrestle chaos air eagle throw person muscle
+// xoxrntzn.itknteka@tezos.example.org
+// Egfv8dVbfk

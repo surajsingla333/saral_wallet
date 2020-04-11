@@ -19,7 +19,7 @@ class Footer extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{backgroundColor: "#f4b0c7", padding:'10px'}}>
         <h1>Footer</h1>
       </div>
     );

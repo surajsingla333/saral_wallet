@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.9.2",
+    "bip39": "^3.0.2",
     "bootstrap": "^4.4.1",
     "conseiljs": "^0.4.1",
     "crypto-js": "^4.0.0",
