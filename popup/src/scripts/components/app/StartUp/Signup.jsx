@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Container, Row, Col} from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
@@ -27,38 +27,52 @@ class Signup extends Component {
         {this.card()}
         {this.renderOption(this.state.option)}
         <Button variant="primary" onClick={(e) => { this.setState({ option: "" }) }}>
-              Back
+          Back
             </Button>
       </div>
     );
   }
 
   card() {
-    if(!(this.state.option)){
-    return (
-      <Card style={{ width: '18rem', margin: '20px' }}>
-        <Card.Body>
-          <Card.Title>Saral Wallet</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">Choose Registration</Card.Subtitle>
-          <Card.Text>
-          <Button variant="primary" ref="method" value="Mnemonic" onClick={(e) => { this.setState({ option: "MnemonicFundraiser" }) }}>
-              With Mnemonic (Fundraiser [will require fundraiser email and password])
+    if (!(this.state.option)) {
+      return (
+        <Card style={{ width: '18rem', margin: '20px' }}>
+          <Card.Body>
+            <Card.Title>Saral Wallet</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted">Choose Registration</Card.Subtitle>
+            <Card.Text>
+              <Container>
+                <Row>
+                  <Col>
+                    <Button variant="primary" ref="method" value="Mnemonic" onClick={(e) => { this.setState({ option: "MnemonicFundraiser" }) }}>
+                      With Mnemonic (Fundraiser [will require fundraiser email and password])
             </Button>
-            <Button variant="primary" ref="method" value="Mnemonic" onClick={(e) => { this.setState({ option: "Mnemonic" }) }}>
-              With Mnemonic (Normal wallet)
+                  </Col>
+                  <Col>
+                    <Button variant="primary" ref="method" value="Mnemonic" onClick={(e) => { this.setState({ option: "Mnemonic" }) }}>
+                      With Mnemonic (Normal wallet)
             </Button>
-            <Button variant="primary" ref="method" value="New" onClick={(e) => { this.setState({ option: "New" }) }}>
-              New Wallet (Mnemonic Wallet)
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Button variant="primary" ref="method" value="New" onClick={(e) => { this.setState({ option: "New" }) }}>
+                      New Wallet (Mnemonic Wallet)
             </Button>
-            <Button variant="primary" ref="method" value="Json" onClick={(e) => { this.setState({ option: "Json" }) }}>
-              With JSON File (Fundraiser)
+                  </Col>
+                  <Col>
+                    <Button variant="primary" ref="method" value="Json" onClick={(e) => { this.setState({ option: "Json" }) }}>
+                      With JSON File (Fundraiser)
             </Button>
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    );
+                  </Col>
+                </Row>
+              </Container>
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      );
     }
-    else{
+    else {
       return <div></div>
     }
   }

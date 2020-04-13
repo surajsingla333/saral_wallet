@@ -1,6 +1,6 @@
 import { TezosNodeWriter} from 'conseiljs';
 
-export const activateAccount = async function (public_key, private_key, pkh, _storeType, node) {
+export const activateAccount = async function (public_key, private_key, pkh, _storeType, _secret, node) {
   const keystore = {
     publicKey: public_key.toString(),
     privateKey: private_key.toString(),
@@ -9,11 +9,15 @@ export const activateAccount = async function (public_key, private_key, pkh, _st
     storeType: _storeType
   };
 
+  console.log(keystore);
+
   const tezosNode = node;
 
   try {
-    const result = await TezosNodeWriter.sendIdentityActivationOperation(tezosNode, keystore);
-    console.log(`Injected operation group id ${result.operationGroupID}`)
+    const result = await TezosNodeWriter.sendIdentityActivationOperation(tezosNode.toString(), keystore, _secret.toString());
+
+    console.log(`Injected operation group id ${result.operationGroupID}`);
+    
     if (result.operationGroupID) {
       return true;
     }
@@ -21,8 +25,8 @@ export const activateAccount = async function (public_key, private_key, pkh, _st
       return false;
     }
   }
-  catch{
-    console.log("ERROR");
+  catch (err){
+    console.log("ERROR", err);
     return (false, "Error");
   }
 }

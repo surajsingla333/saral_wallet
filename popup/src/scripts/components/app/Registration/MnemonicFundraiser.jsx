@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
@@ -94,7 +94,7 @@ class MnemonicFundraiser extends Component {
 
       if (typeof (result) === 'object') {
 
-        
+
         console.log("PUBLICKEYHASH", result.publicKeyHash);
         console.log("PRIVATE", result.privateKey);
         console.log("PUBLIC", result.publicKey);
@@ -107,18 +107,18 @@ class MnemonicFundraiser extends Component {
         // this.state.storeType = result.storeType;
 
         this.setState({
-        public: result.publicKey,
-        private: result.privateKey,
-        pkh: result.publicKeyHash,
-        mnemonic: k.toString(),
-        storeType: result.storeType,
-        gotoPassword: true,
+          public: result.publicKey,
+          private: result.privateKey,
+          pkh: result.publicKeyHash,
+          mnemonic: k.toString(),
+          storeType: result.storeType,
+          gotoPassword: true,
         })
 
         console.log("SENDING", this.state);
 
         this.props.addFundraiserAccWithMnemonic(this.state);
-        
+
       }
       else if (typeof (result) === 'string') {
         this.state.error = true;
@@ -178,27 +178,34 @@ class MnemonicFundraiser extends Component {
 
   main() {
     return (
-      <div>
-        <h1>{this.props.file}</h1>
-        <h2>Enter mnemonic phrase</h2>
-        <Form onSubmit={this.addAccount.bind(this)}>
-          <Form.Group controlId="exampleForm.ControlTextarea1">
-            <Form.Control as="textarea" rows="3" ref="privateKey" />
-          </Form.Group>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email of fundraiser account</Form.Label>
-            <Form.Control type="email" placeholder="Enter email" ref="email" />
-          </Form.Group>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>password of fundraiser account</Form.Label>
-            <Form.Control type="password" placeholder="Enter password" ref="password" />
-          </Form.Group>
+      <Container>
+        <Row>
+          <Col>
+            <h2>Enter mnemonic phrase</h2>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form onSubmit={this.addAccount.bind(this)}>
+              <Form.Group controlId="exampleForm.ControlTextarea1">
+                <Form.Control as="textarea" rows="3" ref="privateKey" />
+              </Form.Group>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>Email of fundraiser account</Form.Label>
+                <Form.Control type="email" placeholder="Enter email" ref="email" />
+              </Form.Group>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>password of fundraiser account</Form.Label>
+                <Form.Control type="password" placeholder="Enter password" ref="password" />
+              </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Submit
+              <Button variant="primary" type="submit">
+                Submit
           </Button>
-        </Form>
-      </div>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 

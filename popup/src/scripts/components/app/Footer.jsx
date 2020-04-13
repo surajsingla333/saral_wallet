@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import {Container, Row, Col} from 'react-bootstrap';
 
 class Footer extends Component {
   // constructor(props) {
@@ -19,9 +20,13 @@ class Footer extends Component {
 
   render() {
     return (
-      <div style={{backgroundColor: "#f4b0c7", padding:'10px'}}>
-        <h1>Footer</h1>
-      </div>
+      <Container>
+        <Row>
+          <Col>
+            <h1>Footer</h1>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

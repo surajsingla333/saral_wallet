@@ -13,7 +13,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.js', '.jsx', '.scss', '.json', '.css', '.min.css'],
+    extensions: ['.js', '.jsx', '.scss', '.sass', '.json', '.css', '.min.css'],
     modules: ['node_modules']
   },
 
@@ -33,9 +33,16 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.s(a|c)ss$/,
+        exclude: /\.module.(s(a|c)ss)$/,
+        loader: 'sass-loader',
+        include: path.join(__dirname, 'src'),
       }
     ]
-  },
+
+  }
   // externals: {
   //   fs: "commonjs fs",
   // }

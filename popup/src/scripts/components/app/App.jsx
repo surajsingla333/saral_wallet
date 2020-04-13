@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {Container, Row, Col, Button } from 'react-bootstrap';
 
 import Body from './Body';
 import Footer from './Footer';
@@ -12,6 +13,8 @@ import Cookies from 'js-cookie';
 import AddAccount from './Registration/AddAccount';
 import AddFundraiserAccount from './Registration/AddFundraiserAccount';
 
+import '../../../styles/app/index.css';
+
 class App extends Component {
 
   constructor(props) {
@@ -19,7 +22,10 @@ class App extends Component {
 
     this.state = {
       cookieName: Cookies.get('name') ? Cookies.get('name') : "",
-      headerMenuAcc:false,
+      headerMenuAcc: false,
+      bodyContent: true,
+      headMenu: false,
+      headerMenuFundAcc: false,
     }
 
   }
@@ -44,17 +50,21 @@ class App extends Component {
 
   }
 
-  addAccount(e){
+  addAccount(e) {
     e.preventDefault();
     this.setState({
+      // bodyContent: false,
+      // headMenu: true,
       headerMenuAcc: true,
       headerMenuFundAcc: false,
     })
   }
 
-  addFundraiserAccount(e){
+  addFundraiserAccount(e) {
     e.preventDefault();
     this.setState({
+      // bodyContent: false,
+      // headMenu: true,
       headerMenuFundAcc: true,
       headerMenuAcc: false,
     })
@@ -62,16 +72,27 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <Header addAccount={this.addAccount.bind(this)} addFundraiserAccount={this.addFundraiserAccount.bind(this)}/>
-        
-        <Body>
-        {this.body()}
-        {this.addAccSetting()}
-        </Body>
+      <Container className="app">
+        <Row>
+          <Col>
+            <Header addAccount={this.addAccount.bind(this)} addFundraiserAccount={this.addFundraiserAccount.bind(this)} />
+          </Col>
+        </Row>
 
-        <Footer />
-      </div>
+        <Row>
+          <Col>
+            <Body>
+              {this.body()}
+              {this.addAccSetting()}
+            </Body>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Footer />
+          </Col>
+        </Row>
+      </Container>
     );
   }
 
@@ -89,12 +110,35 @@ class App extends Component {
     }
   }
 
-  addAccSetting(){
-    if(this.state.headerMenuAcc){
-          return (<AddAccount />);
+  addAccSetting() {
+    if (this.state.headerMenuAcc) {
+      return (
+        <Container>
+          <Row>
+      <AddAccount />
+      </Row>
+      {/* <Row>
+        <Button onClick={this.setState({
+            bodyContent: true,
+            headMenu: false
+          })}>Back</Button>
+      </Row> */}
+      </Container>
+      );
     }
-    else if(this.state.headerMenuFundAcc){
-      return(<AddFundraiserAccount/>);
+    else if (this.state.headerMenuFundAcc) {
+      return (
+        <Container>
+          <Row>
+        <AddFundraiserAccount />
+        </Row>
+        {/* <Row>
+          <Button onClick={this.setState({
+            bodyContent: true,
+            headMenu: false
+          })}>Back</Button>
+        </Row> */}
+        </Container>);
     }
   }
 

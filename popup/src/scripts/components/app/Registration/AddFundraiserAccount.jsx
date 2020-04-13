@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
@@ -207,9 +207,14 @@ class AddAccount extends Component {
 
   main() {
     return (
-      <div>
-        <h1>{this.props.file}</h1>
+      <Container>
+        <Row>
+        <Col>
         <h2>Enter mnemonic</h2>
+        </Col>
+        </Row>
+        <Row>
+          <Col>
         <Form onSubmit={this.addAccount.bind(this)}>
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Control as="textarea" rows="3" ref="privateKey" />
@@ -227,7 +232,9 @@ class AddAccount extends Component {
             Submit
           </Button>
         </Form>
-      </div>
+        </Col>
+        </Row>
+      </Container>
     );
   }
 

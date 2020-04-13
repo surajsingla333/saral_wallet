@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
@@ -180,7 +180,9 @@ class Password extends Component {
       )
     }
     return (
-      <div>
+      <Container>
+        <Row>
+        <Col>
         <Form onSubmit={this.setPassword.bind(this)}>
           <Form.Group controlId="input">
             <Form.Label>Enter your password</Form.Label>
@@ -207,7 +209,9 @@ class Password extends Component {
             Submit
   </Button>
         </Form>
-      </div>
+        </Col>
+        </Row>
+      </Container>
     );
   }
 }

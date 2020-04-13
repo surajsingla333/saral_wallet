@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
 import Cookies from 'js-cookie';
 
-import { Button, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, ButtonGroup, ToggleButton, Navbar, NavDropdown, Nav, Dropdown, DropdownType, DropdownButton } from 'react-bootstrap';
+
+// import '../../../styles/content/Header/index.css';
 
 class Header extends Component {
   constructor(props) {
@@ -29,39 +32,54 @@ class Header extends Component {
   onRadioChange(e) {
     console.log(e.target.value);
     console.log(e.target);
-    console.log(e.target.variant);
+    // console.log(e.target.variant);
     // e.target.variant = "success";
+    Cookies.set('network', e.target.value);
     this.setState({ network: e.target.value });
     this.props.changeNetwork(this.state.network);
-
   }
 
   render() {
     return (
-      <div style={{ backgroundColor: "#413c69", padding: '10px' }}>
-        <h1>Header</h1>
-        {this.networkOptions()}
-      </div>
+      <Container>
+        <Row className="header">
+          {/* <div className="logo"></div> */}
+          <Col md={{ span: 6, offset: 3 }}>
+            <h6>SARAL WALLET</h6>
+            {this.networkOptions()}
+          </Col>
+        </Row>
+      </Container>
     );
   }
 
   networkOptions() {
     if (Cookies.get('name')) {
       return (
-        <div>
-          <ButtonGroup toggle onChange={this.onRadioChange.bind(this)}>
-            <ToggleButton variant="primary" type="radio" name="radio1" value="https://tezos-dev.cryptonomic-infra.tech:443/">
-              Network: Tezos dev
-          </ToggleButton>
-            <ToggleButton variant="primary" type="radio" name="radio2" value="https://conseil-dev.cryptonomic-infra.tech:443/">
-              Network: Conseil dev
-          </ToggleButton>
-          </ButtonGroup>
-          <Button variant="secondary" ref="method" value="Json" onClick={this.props.addAccount}> Add Account with pk
-        </Button>
-        <Button variant="secondary" ref="method" value="Json" onClick={this.props.addFundraiserAccount}> Add Fundraiser Account with mnemonic
-        </Button>
-        </div>
+        <Container>
+          <Row>
+            <Col>
+              <Form onChange={this.onRadioChange.bind(this)}>
+                <Form.Group controlId="exampleForm.SelectCustomSizeSm">
+                  <Form.Control as="select" value={Cookies.get("network")} size="sm" custom>
+                    <option value="https://tezos-dev.cryptonomic-infra.tech:443">Tezos Dev</option>
+                    <option value="https://conseil-dev.cryptonomic-infra.tech:443">Conseil Dev</option>
+                  </Form.Control>
+                </Form.Group>
+                </Form>
+            </Col>
+
+              <Col>
+                <DropdownButton size="sm" title="Acc">
+                  <Dropdown.Item onClick={this.props.addAccount}>Add Account with pk</Dropdown.Item>
+                  <Dropdown.Item onClick={this.props.addFundraiserAccount}>Add Fundraiser Account with mnemonic</Dropdown.Item>
+                  <Dropdown.Divider />
+                </DropdownButton>
+              </Col>
+
+          </Row>
+
+        </Container>
       );
     }
   }
@@ -70,7 +88,7 @@ class Header extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    count: state.count.file,
+            count: state.count.file,
     file: state.file.file,
     network: state.getNetwork.network,
   }
@@ -78,7 +96,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeNetwork: (newNetwork) => dispatch({ type: "CHANGE_NETWORK", state: newNetwork })
+            changeNetwork: (newNetwork) => dispatch({ type: "CHANGE_NETWORK", state: newNetwork })
   }
 }
 

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
+import {Container, Row, Col, Form, Button} from 'react-bootstrap';
 
 import Cookies from 'js-cookie';
 
-import { activateAccount } from '../../../../../API/src/activation/activate';
+import { activateAccount } from '../../../../../API/src/activation/activateFundraiser';
 import { revealAccount } from '../../../../../API/src/reveal/reveal';
 import { decryptKeys } from '../../../../../API/src/encryption/decryptAES';
+
+import { accountBalance } from '../../../../../API/src/retrieveFunds/index';
 
 class Body extends Component {
   constructor(props) {
@@ -14,8 +16,16 @@ class Body extends Component {
 
     this.state = {
       account: Cookies.get('name'),
-      network: props.network
+      network: Cookies.get("network") || props.network
     };
+  }
+
+  componentWillMount() {
+    setTimeout(async () => {
+      var res = await accountBalance(this.state.network, Cookies.get('pkh'));
+      console.log("ACCOUNT BALANCE: ", res);
+    }, 500);
+
   }
 
   componentDidMount() {
@@ -29,12 +39,17 @@ class Body extends Component {
   activate(e) {
     e.preventDefault();
 
+    var activSecret = this.refs.secret.value;
     var pass = Cookies.get('password');
 
-    var public_key = decryptKeys(Cookies.get('publicKey'), pass)
-    var private_key = decryptKeys(Cookies.get('privateKey'), pass)
+    var public_key = decryptKeys(Cookies.get('publicKey'), pass);
+    var private_key = decryptKeys(Cookies.get('privateKey'), pass);
 
-    var activatedRes = activateAccount(public_key, private_key, Cookies.get('pkh'), Cookies.get('storeType'), this.props.network);
+    console.log(activSecret, pass, public_key, private_key);
+
+    var activatedRes = activateAccount(public_key, private_key, Cookies.get('pkh'), Cookies.get('storeType'), activSecret, this.props.network);
+
+    console.log(activatedRes);
 
     if (activatedRes) {
       this.setState({
@@ -82,26 +97,64 @@ class Body extends Component {
 
   render() {
     return (
-      <div style={{ backgroundColor: "#ad62aa", padding: '10px' }}>
-        {this.props.children}
-
-        {Cookies.get("pkh")}
-        {this.buttons()}
-
-      </div>
+      <Container>
+        <Row>
+          <Col>
+            {this.props.children}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {Cookies.get("pkh")}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {this.buttons()}
+          </Col>
+        </Row>
+      </Container>
     );
   }
+
+  // main(){
+  //   if(this.props.body){
+  //     return(
+  //       <Container>
+  //         <Row>
+  //         <Col>
+  //           {Cookies.get("pkh")}
+  //         </Col>
+  //       </Row>
+  //       <Row>
+  //         <Col>
+  //           {this.buttons()}
+  //         </Col>
+  //       </Row>
+  //       </Container>
+  //     )
+  //   }
+  // }
 
   buttons() {
     if (Cookies.get("name")) {
       return (
+
         <div>
-          <Button variant="primary" ref="method" value="Json" onClick={this.activate.bind(this)}>
-            Activate Account
+          <Form onSubmit={this.activate.bind(this)}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Secret</Form.Label>
+              <Form.Control type="text" placeholder="Enter fundraiser secret" ref="secret" />
+            </Form.Group>
+            <Button type="submit" variant="primary" ref="method" value="activate">
+              Activate Account
         </Button>
-          <Button variant="primary" ref="method" value="Json" onClick={this.reveal.bind(this)}>
+          </Form>
+          <hr></hr>
+          <Button variant="primary" ref="method" value="reveal" onClick={this.reveal.bind(this)}>
             Reveal Account
         </Button>
+
         </div>
       )
     }
@@ -129,3 +182,11 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Body);
+
+
+// camera shop kitchen nuclear mass news brick half beach outer shield chat blame host gap
+// ruplxuwv.edfqicqp@tezos.example.org
+// qpUcKjxOAI
+//   "secret": "fa8e481afc56cc020ae027b7d0bcf732e539c360",
+  // "amount": "7483770027",
+  // "pkh": "tz1Uy5NhhNkH9R7E5hrCJ9agLYAXud5gqAVQ",

@@ -4,11 +4,12 @@ import {calling} from './TESTING/send';
 import {genHash, checkHash} from './encryption/encryptBcrypt';
 import {encryptKeys} from './encryption/encryptAES';
 import {decryptKeys} from './encryption/decryptAES';
-import {activateAccount} from './activation/activate';
+import {activateAccount} from './activation/activateFundraiser';
 import {delegateAccount} from './delegation/delegate';
 import {restoreIdentityWithSecretKey} from './generateFromPk/account';
 import {revealAccount} from './reveal/reveal';
 import {unlockFundraiserIdentity} from './generatefromMnemonic/account';
+import {accountBalance} from './retrieveFunds/index';
 // import {generateAccount} from './registration/generateWallet';
 // import rootReducer from './reducers/index';
 

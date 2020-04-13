@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
@@ -117,7 +117,7 @@ class Json extends Component {
       else if (typeof (result) === 'string') {
         this.state.error = true;
       }
-      else{
+      else {
         this.state.error = true;
       }
     }, 500)
@@ -146,18 +146,26 @@ class Json extends Component {
       // alert("WRONG JSON FILE");
     }
     return (
-      <div>
-        <h1>{this.props.file}</h1>
-        <h2>Add your address.json file to load your wallet address.</h2>
-        <Form onSubmit={this.createWallet.bind(this)}>
-          <Form.Group controlId="input">
-            <Form.Control type="file" accept="application/JSON" ref="file" placeholder="Browse File" />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
-  </Button>
-        </Form>
-      </div>
+      <Container>
+        <Row>
+          <Col>
+            <h2>Add your address.json file to load your wallet address.</h2>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form onSubmit={this.createWallet.bind(this)}>
+              <Form.Group controlId="input">
+                <Form.Control type="file" accept="application/JSON" ref="file" placeholder="Browse File" />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
+
     );
     // }
     // else if ((this.state.stored)) {

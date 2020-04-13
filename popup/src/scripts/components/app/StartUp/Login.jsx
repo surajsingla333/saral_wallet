@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Card, Button } from 'react-bootstrap';
+import { Form, Card, Button, Container, Row, Col } from 'react-bootstrap';
 
 import { connect } from 'react-redux';
 
@@ -7,7 +7,7 @@ import { initAccount } from '../../../../../../API/src/registration/loadWallet';
 import { calling } from '../../../../../../API/src/TESTING/send';
 
 import { checkHash } from '../../../../../../API/src/encryption/encryptBcrypt';
-import {decryptKeys} from '../../../../../../API/src/encryption/decryptAES';
+import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
 import Body from '../Body';
 
 import * as Signups from '../Registration/index';
@@ -92,7 +92,7 @@ class Login extends Component {
     if (hash === this.state.passHash) {
 
       var PKH = decryptKeys(this.props.data.accounts[0].pkh, password);
-      
+
       var inThirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000);
 
       Cookies.set("password", password, {
@@ -144,17 +144,20 @@ class Login extends Component {
             <Card.Subtitle className="mb-2 text-muted">Choose Registration</Card.Subtitle>
             <Card.Text>
 
-              <Form onSubmit={this.login.bind(this)}>
-                <Form.Group controlId="input">
-                  <Form.Label>Enter your password</Form.Label>
-                  <Form.Control type="password" ref="pass" placeholder="Your password" />
-                </Form.Group>
+              <Container>
+                <Row>
+                  <Form onSubmit={this.login.bind(this)}>
+                    <Form.Group controlId="input">
+                      <Form.Label>Enter your password</Form.Label>
+                      <Form.Control type="password" ref="pass" placeholder="Your password" />
+                    </Form.Group>
 
-                <Button variant="primary" type="submit">
-                  Submit
+                    <Button variant="primary" type="submit">
+                      Submit
                 </Button>
-
-              </Form>
+                  </Form>
+                </Row>
+              </Container>
             </Card.Text>
           </Card.Body>
         </Card>
