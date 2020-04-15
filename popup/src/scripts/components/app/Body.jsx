@@ -47,7 +47,7 @@ class Body extends Component {
 
     console.log(activSecret, pass, public_key, private_key);
 
-    var activatedRes = activateAccount(public_key, private_key, Cookies.get('pkh'), Cookies.get('storeType'), activSecret, this.props.network);
+    var activatedRes = activateAccount(public_key, private_key, Cookies.get('pkh'), Cookies.get('storeType'), activSecret, this.state.network);
 
     console.log(activatedRes);
 
@@ -75,7 +75,7 @@ class Body extends Component {
     var public_key = decryptKeys(Cookies.get('publicKey'), pass)
     var private_key = decryptKeys(Cookies.get('privateKey'), pass)
 
-    var revealedRes = revealAccount(public_key, private_key, Cookies.get('pkh'), Cookies.get('storeType'), this.props.network);
+    var revealedRes = revealAccount(public_key, private_key, Cookies.get('pkh'), Cookies.get('storeType'), this.state.network);
 
     if (revealedRes) {
 

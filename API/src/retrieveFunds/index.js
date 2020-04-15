@@ -1,12 +1,11 @@
 import { API } from '../../myAPIkey';
 
 
-import { ConseilDataClient, ConseilQueryBuilder, ConseilOperator, ConseilFunction } from 'conseiljs';
-// const conseiljs = require('conseiljs');
+import { ConseilDataClient, ConseilQueryBuilder, ConseilOperator, ConseilFunction, TezosConseilClient } from 'conseiljs';
 import {inspect} from 'util';
 
 const platform = 'tezos';
-const network = 'babylonnet';
+const network = 'carthagenet';
 const entity = 'accounts';
 
 
@@ -26,9 +25,10 @@ export const accountBalance = async function (node, address) {
   console.log("GETTING BALANCE 2 ", accountQuery);
 
   try {
-    const result = await ConseilDataClient.executeEntityQuery(conseilServer, platform, network, entity, accountQuery);
+    // const result = await ConseilDataClient.executeEntityQuery(conseilServer, platform, network, entity, accountQuery);
+    const result = await TezosConseilClient.getAccount(conseilServer, network, address);
 
-    console.log(`${inspect(result, false, 2, false)}`);
+    console.log(`INSPECTING \n ${inspect(result, false, 2, false)}`);
     return result;
   }
   catch (err) {

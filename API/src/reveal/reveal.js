@@ -27,6 +27,8 @@ export const revealAccount = async function (public_key, private_key, pkh, _stor
     storeType: _storeType
   };
 
+  console.log("IN REVEAL", keystore);
+
   const tezosNode = node;
 
   try {
