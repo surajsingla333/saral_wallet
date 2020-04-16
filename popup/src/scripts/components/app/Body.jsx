@@ -6,6 +6,8 @@ import Cookies from 'js-cookie';
 
 import { activateAccount } from '../../../../../API/src/activation/activateFundraiser';
 import { revealAccount } from '../../../../../API/src/reveal/reveal';
+import {sendTransaction} from '../../../../../API/src/transfer/send';
+
 import { decryptKeys } from '../../../../../API/src/encryption/decryptAES';
 
 import { accountBalance } from '../../../../../API/src/retrieveFunds/index';
@@ -62,6 +64,39 @@ class Body extends Component {
       console.log("Error In Activation");
       this.setState({
         activated: false
+      })
+    }
+
+  }
+
+  send(e) {
+    e.preventDefault();
+
+    var toAccount = this.refs.to.value;
+    var amount = this.refs.value.value;
+
+    var pass = Cookies.get('password');
+
+    var public_key = decryptKeys(Cookies.get('publicKey'), pass);
+    var private_key = decryptKeys(Cookies.get('privateKey'), pass);
+
+    console.log(toAccount, amount, pass, public_key, private_key);
+
+    var activatedRes = sendTransaction(public_key.toString(), private_key.toString(), Cookies.get('pkh').toString(), Cookies.get('storeType').toString(), this.state.network, toAccount.toString(), parseInt(amount));
+
+    console.log(activatedRes);
+
+    if (activatedRes) {
+      this.setState({
+        valueSent: true
+      })
+
+      // this.props.changeActivationStatus(this.state)
+    }
+    else {
+      console.log("Error In Activation");
+      this.setState({
+        valueSent: false
       })
     }
 
@@ -154,6 +189,20 @@ class Body extends Component {
           <Button variant="primary" ref="method" value="reveal" onClick={this.reveal.bind(this)}>
             Reveal Account
         </Button>
+        <hr></hr>
+        <Form onSubmit={this.send.bind(this)}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Receiver</Form.Label>
+              <Form.Control type="text" placeholder="Enter fundraiser secret" ref="to" />
+            </Form.Group>
+            <Form.Group>
+            <Form.Label>Amount</Form.Label>
+              <Form.Control type="number" placeholder="Enter fundraiser secret" ref="value" />
+            </Form.Group>
+            <Button type="submit" variant="primary" ref="method" value="activate">
+              Transfer
+        </Button>
+          </Form>
 
         </div>
       )

@@ -10,6 +10,7 @@ import {restoreIdentityWithSecretKey} from './generateFromPk/account';
 import {revealAccount} from './reveal/reveal';
 import {unlockFundraiserIdentity} from './generatefromMnemonic/account';
 import {accountBalance} from './retrieveFunds/index';
+import {sendTransaction} from './transfer/send';
 // import {generateAccount} from './registration/generateWallet';
 // import rootReducer from './reducers/index';
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
 
 import { Container, Row, Col, Button, Form, ButtonGroup, ToggleButton, Navbar, NavDropdown, Nav, Dropdown, DropdownType, DropdownButton } from 'react-bootstrap';
-
+import {decryptKeys} from '../../../../../API/src/encryption/decryptAES';
 // import '../../../styles/content/Header/index.css';
 
 class Header extends Component {
@@ -39,22 +39,68 @@ class Header extends Component {
     this.props.changeNetwork(this.state.network);
   }
 
+  onRadioChangeAccount(e){
+    e.preventDefault(e);
+    console.log(e.target.value);
+    console.log(e.target.val2);
+    console.log(e.target);
+
+    var inThirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000);
+
+    var changedAccount = this.props.getLocalStorage.accounts[this.props.getLocalStorage.listAccountsNames.indexOf(e.target.value)];
+
+    var p = Cookies.get("password");
+    var pkh = decryptKeys(changedAccount.pkh, p);
+
+    Cookies.set("password", p, {
+      expires: inThirtyMinutes
+    });
+    Cookies.set("pkh", pkh, {
+      expires: inThirtyMinutes
+    });
+    Cookies.set("publicKey", changedAccount.public, {
+      expires: inThirtyMinutes
+    });
+    Cookies.set("privateKey", changedAccount.private, {
+      expires: inThirtyMinutes
+    });
+    Cookies.set("name", e.target.value, {
+      expires: inThirtyMinutes
+    });
+    Cookies.set("storeType", changedAccount.storeType, {
+      expires: inThirtyMinutes
+    });
+
+
+  }
+
   render() {
+
+
+    var accounts = this.props.getLocalStorage.listAccountsNames;
+
+    const listOfAccounts = accounts.map((account, key) =>
+
+      <option key={key} val2={key} value={account}>
+        {account}
+      </option>
+    )
+
     return (
       <Container>
         <Row className="header">
-          {/* <div className="logo"></div> */}
-          <Col md={{ span: 6, offset: 3 }}>
+          <Col md={{ span: 10, offset: 1 }}>
             <h6>SARAL WALLET</h6>
-            {this.networkOptions()}
+            {this.networkOptions(listOfAccounts)}
           </Col>
         </Row>
       </Container>
     );
   }
 
-  networkOptions() {
+  networkOptions(accounts) {
     if (Cookies.get('name')) {
+      // console.log("ACCOUNTs", accounts);
       return (
         <Container>
           <Row>
@@ -66,16 +112,26 @@ class Header extends Component {
                     <option value="https://conseil-dev.cryptonomic-infra.tech:443">Conseil Dev</option>
                   </Form.Control>
                 </Form.Group>
-                </Form>
+              </Form>
             </Col>
 
-              <Col>
-                <DropdownButton size="sm" title="Acc">
-                  <Dropdown.Item onClick={this.props.addAccount}>Add Account with pk</Dropdown.Item>
-                  <Dropdown.Item onClick={this.props.addFundraiserAccount}>Add Fundraiser Account with mnemonic</Dropdown.Item>
-                  <Dropdown.Divider />
-                </DropdownButton>
-              </Col>
+            <Col>
+              <Form onChange={this.onRadioChangeAccount.bind(this)}>
+                <Form.Group controlId="exampleForm.SelectCustomSizeSm">
+                  <Form.Control as="select" value={Cookies.get("name")} size="sm" custom>
+                    {accounts}
+                  </Form.Control>
+                </Form.Group>
+              </Form>
+            </Col>
+
+            <Col>
+              <DropdownButton size="sm" title="Acc">
+                <Dropdown.Item onClick={this.props.addAccount}>Add Account with pk</Dropdown.Item>
+                <Dropdown.Item onClick={this.props.addFundraiserAccount}>Add Fundraiser Account with mnemonic</Dropdown.Item>
+                <Dropdown.Divider />
+              </DropdownButton>
+            </Col>
 
           </Row>
 
@@ -88,15 +144,16 @@ class Header extends Component {
 
 const mapStateToProps = (state) => {
   return {
-            count: state.count.file,
+    count: state.count.file,
     file: state.file.file,
     network: state.getNetwork.network,
+    getLocalStorage: state.getLocalStorage
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-            changeNetwork: (newNetwork) => dispatch({ type: "CHANGE_NETWORK", state: newNetwork })
+    changeNetwork: (newNetwork) => dispatch({ type: "CHANGE_NETWORK", state: newNetwork })
   }
 }
 
