@@ -9,6 +9,7 @@ import getNetwork from './network';
 import acivate from './activateStatus';
 import reveal from './revealStatus';
 import saveWallet from './storeWallet';
+import changeBody from './changeBody';
 
 
 export default combineReducers({
@@ -20,5 +21,6 @@ export default combineReducers({
   getNetwork: getNetwork,
   acivate: acivate,
   reveal: reveal,
-  saveWallet: saveWallet
+  saveWallet: saveWallet,
+  changeBody: changeBody
 });

@@ -8,6 +8,7 @@ import Header from './Header';
 import Signup from './StartUp/Signup';
 import Password from './Registration/Password';
 import Login from './StartUp/Login';
+import Home from './StartUp/Home';
 
 import Cookies from 'js-cookie';
 import AddAccount from './Registration/AddAccount';
@@ -53,8 +54,6 @@ class App extends Component {
   addAccount(e) {
     e.preventDefault();
     this.setState({
-      // bodyContent: false,
-      // headMenu: true,
       headerMenuAcc: true,
       headerMenuFundAcc: false,
     })
@@ -63,8 +62,6 @@ class App extends Component {
   addFundraiserAccount(e) {
     e.preventDefault();
     this.setState({
-      // bodyContent: false,
-      // headMenu: true,
       headerMenuFundAcc: true,
       headerMenuAcc: false,
     })
@@ -83,7 +80,7 @@ class App extends Component {
           <Col>
             <Body>
               {this.body()}
-              {this.addAccSetting()}
+              {/* {this.addAccSetting()} */}
             </Body>
           </Col>
         </Row>
@@ -99,7 +96,7 @@ class App extends Component {
   body() {
     if (this.props.data) {
       if (this.state.cookieName) {
-        return (<h1>Body</h1>)
+        return (<Home/>)
       }
       else {
         return (<Login />);
@@ -117,12 +114,6 @@ class App extends Component {
           <Row>
       <AddAccount />
       </Row>
-      {/* <Row>
-        <Button onClick={this.setState({
-            bodyContent: true,
-            headMenu: false
-          })}>Back</Button>
-      </Row> */}
       </Container>
       );
     }
@@ -132,12 +123,6 @@ class App extends Component {
           <Row>
         <AddFundraiserAccount />
         </Row>
-        {/* <Row>
-          <Button onClick={this.setState({
-            bodyContent: true,
-            headMenu: false
-          })}>Back</Button>
-        </Row> */}
         </Container>);
     }
   }

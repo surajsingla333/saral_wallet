@@ -176,7 +176,7 @@ class Password extends Component {
     if (this.state.gotoBody && this.state.loggedIn) {
       this.state.gotoBody = false;
       return (
-        <Body />
+        <Home />
       )
     }
     return (

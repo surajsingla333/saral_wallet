@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
 
 import { Container, Row, Col, Button, Form, ButtonGroup, ToggleButton, Navbar, NavDropdown, Nav, Dropdown, DropdownType, DropdownButton } from 'react-bootstrap';
-import {decryptKeys} from '../../../../../API/src/encryption/decryptAES';
+import { decryptKeys } from '../../../../../API/src/encryption/decryptAES';
 // import '../../../styles/content/Header/index.css';
 
 class Header extends Component {
@@ -39,7 +39,7 @@ class Header extends Component {
     this.props.changeNetwork(this.state.network);
   }
 
-  onRadioChangeAccount(e){
+  onRadioChangeAccount(e) {
     e.preventDefault(e);
     console.log(e.target.value);
     console.log(e.target.val2);
@@ -76,15 +76,18 @@ class Header extends Component {
 
   render() {
 
+    var listOfAccounts = [];
+    
+    if (this.props.getLocalStorage) {
+      var accounts = this.props.getLocalStorage.listAccountsNames;
 
-    var accounts = this.props.getLocalStorage.listAccountsNames;
+      listOfAccounts = accounts.map((account, key) =>
 
-    const listOfAccounts = accounts.map((account, key) =>
-
-      <option key={key} val2={key} value={account}>
-        {account}
-      </option>
-    )
+        <option key={key} val2={key} value={account}>
+          {account}
+        </option>
+      )
+    }
 
     return (
       <Container>

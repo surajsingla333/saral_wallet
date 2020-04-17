@@ -1,168 +1,235 @@
 import React, { Component } from 'react';
-import { Card, Button } from 'react-bootstrap';
-
 import { connect } from 'react-redux';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
-import { initAccount } from '../../../../../../API/src/registration/loadWallet';
-import { calling } from '../../../../../../API/src/TESTING/send';
+import Cookies from 'js-cookie';
 
-import * as Signups from '../Registration/index';
+import { activateAccount } from '../../../../../../API/src/activation/activateFundraiser';
+import { revealAccount } from '../../../../../../API/src/reveal/reveal';
+import { sendTransaction } from '../../../../../../API/src/transfer/send';
+
+import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
+
+import { accountBalance } from '../../../../../../API/src/retrieveFunds/index';
 
 class Activate extends Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      file: "",
-      stored: null,
-      result: null,
-      option: '',
-    }
-  }
-
-  componentWillMount() {
-    let stored = localStorage.getItem("USER WALLET");
-    console.log("stored", stored);
-    if (stored && stored !== "") {
-      console.log("IN IF", !stored);
-      console.log("IN IF 2", stored);
-      this.state.stored = JSON.parse(stored);
-      this.state.result = initAccount(this.state.stored);
-    }
-    console.log("state", this.state);
+      account: Cookies.get('name'),
+      network: Cookies.get("network") || props.network
+    };
   }
 
 
   componentDidMount() {
-    // this.setState({file: localStorage.getItem("File Storage")});
-    // console.log(localStorage.getItem("File Storage"))
-    console.log("PROPS", this.props);
-    console.log("COUNT", this.props.count);
-    console.log("FILE", this.props.file);
-    //  
-
-
-    calling();
-
-    console.log(this.state.result);
-    // let stored = localStorage.getItem("USER WALLET");
-    // console.log("stored", stored);
-    // if (stored !== "") {
-    //   this.state.stored = JSON.parse(stored);
-    // }
-    // console.log("state", this.state);
-
-    // alert(this.props.file);
+    console.log("IN ACTIVATE PROPS", this.props);
   }
 
-  createWallet(e) {
+  activate(e) {
     e.preventDefault();
-    console.log(this.refs.file);
-    console.log(this.refs.file.files);
-    console.log(this.refs.file.files[0]);
-    var k = this.refs.file.files[0];
-    console.log(k.toString());
-    console.log(k.name);
 
-    let reader = new FileReader();
+    var activSecret = this.refs.secret.value;
+    var pass = Cookies.get('password');
 
-    reader.readAsText(k);
+    var public_key = decryptKeys(Cookies.get('publicKey'), pass);
+    var private_key = decryptKeys(Cookies.get('privateKey'), pass);
 
-    let rr;
+    console.log(activSecret, pass, public_key, private_key);
 
-    reader.onload = function () {
-      rr = reader.result;
-      console.log(rr);
+    var activatedRes = activateAccount(public_key, private_key, Cookies.get('pkh'), Cookies.get('storeType'), activSecret, this.state.network);
+
+    console.log(activatedRes);
+
+    if (activatedRes) {
+      this.setState({
+        activated: true
+      })
+
+      this.props.changeActivationStatus(this.state)
+    }
+    else {
+      console.log("Error In Activation");
+      this.setState({
+        activated: false
+      })
     }
 
-    setTimeout(() => {
-
-      console.log("GOT RR", rr)
-
-      this.state.file = rr;
-
-      console.log("CLICKED");
-      console.log(this.state);
-      console.log("RR", rr);
-      this.props.makeWallet(this.state);
-
-      let obj = JSON.parse(rr);
-      localStorage.setItem("USER WALLET", rr);
-
-    }, 500)
-    // this.props.dispatch({
-    //   type: "SAVE_FILE"
-    // })
-    // localStorage.setItem("File Stored", "this.refs.file.files[0]")
-    // chrome.storage.local.set({"FILE3": this.refs.file.files[0]})
   }
 
+  send(e) {
+    e.preventDefault();
 
+    var toAccount = this.refs.to.value;
+    var amount = this.refs.value.value;
+
+    var pass = Cookies.get('password');
+
+    var public_key = decryptKeys(Cookies.get('publicKey'), pass);
+    var private_key = decryptKeys(Cookies.get('privateKey'), pass);
+
+    console.log(toAccount, amount, pass, public_key, private_key);
+
+    var activatedRes = sendTransaction(public_key.toString(), private_key.toString(), Cookies.get('pkh').toString(), Cookies.get('storeType').toString(), this.state.network, toAccount.toString(), parseInt(amount));
+
+    console.log(activatedRes);
+
+    if (activatedRes) {
+      this.setState({
+        valueSent: true
+      })
+
+      // this.props.changeActivationStatus(this.state)
+    }
+    else {
+      console.log("Error In Activation");
+      this.setState({
+        valueSent: false
+      })
+    }
+
+  }
+
+  reveal(e) {
+    e.preventDefault();
+
+    var pass = Cookies.get('password');
+
+    var public_key = decryptKeys(Cookies.get('publicKey'), pass)
+    var private_key = decryptKeys(Cookies.get('privateKey'), pass)
+
+    var revealedRes = revealAccount(public_key, private_key, Cookies.get('pkh'), Cookies.get('storeType'), this.state.network);
+
+    if (revealedRes) {
+
+      this.setState({
+        revealed: true
+      })
+
+      this.props.changeRevealStatus(this.state)
+    }
+
+    else {
+      console.log("Error In Reveal");
+      this.setState({
+        revealed: false
+      })
+    }
+
+  }
 
   render() {
-
-    console.log("STATE", this.state.option);
-
     return (
-      <div>
-        {this.card()}
-        {this.renderOption(this.state.option)}
-        <Button variant="primary" onClick={(e) => { this.setState({ option: "" }) }}>
-              Back
-            </Button>
-      </div>
+      <Container>
+        <Row>
+          <Card style={{ width: '18rem', margin: '20px' }}>
+            <Card.Body>
+              <Card.Subtitle className="mb-2 text-muted">Send Amount</Card.Subtitle>
+              <Card.Text>
+
+                <Form onSubmit={this.activate.bind(this)}>
+                  <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Secret</Form.Label>
+                    <Form.Control type="text" placeholder="Enter fundraiser secret" ref="secret" />
+                  </Form.Group>
+                  <Button type="submit" variant="primary" ref="method" value="activate">
+                    Activate Account
+        </Button>
+                </Form>
+
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Row>
+      </Container>
     );
   }
 
-  card() {
-    if(!(this.state.option)){
-    return (
-      <Card style={{ width: '18rem' }}>
-        <Card.Body>
-          <Card.Title>Saral Wallet</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">Choose Registration</Card.Subtitle>
-          <Card.Text>
-            <Button variant="primary" ref="method" value="Mnemonic" onClick={(e) => { this.setState({ option: "Mnemonic" }) }}>
-              With Mnemonic
-            </Button>
-            <Button variant="primary" ref="method" value="New" onClick={(e) => { this.setState({ option: "New" }) }}>
-              New Wallet
-            </Button>
-            <Button variant="primary" ref="method" value="Json" onClick={(e) => { this.setState({ option: "Json" }) }}>
-              With JSON File
-            </Button>
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    );
-    }
-    else{
-      return <div></div>
-    }
-  }
+  // main(){
+  //   if(this.props.body){
+  //     return(
+  //       <Container>
+  //         <Row>
+  //         <Col>
+  //           {Cookies.get("pkh")}
+  //         </Col>
+  //       </Row>
+  //       <Row>
+  //         <Col>
+  //           {this.buttons()}
+  //         </Col>
+  //       </Row>
+  //       </Container>
+  //     )
+  //   }
+  // }
 
-  renderOption(option) {
-    if (!option) {
-      return <div></div>
-    }
-    const Signup = Signups[option];
+  buttons() {
+    if (Cookies.get("name")) {
+      return (
 
-    return <Signup />
+        <div>
+          <Form onSubmit={this.activate.bind(this)}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Secret</Form.Label>
+              <Form.Control type="text" placeholder="Enter fundraiser secret" ref="secret" />
+            </Form.Group>
+            <Button type="submit" variant="primary" ref="method" value="activate">
+              Activate Account
+        </Button>
+          </Form>
+          <hr></hr>
+          <Button variant="primary" ref="method" value="reveal" onClick={this.reveal.bind(this)}>
+            Reveal Account
+        </Button>
+          <hr></hr>
+          <Form onSubmit={this.send.bind(this)}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Receiver</Form.Label>
+              <Form.Control type="text" placeholder="Enter fundraiser secret" ref="to" />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Amount</Form.Label>
+              <Form.Control type="number" placeholder="Enter fundraiser secret" ref="value" />
+            </Form.Group>
+            <Button type="submit" variant="primary" ref="method" value="activate">
+              Transfer
+        </Button>
+          </Form>
+
+        </div>
+      )
+    }
   }
 }
-
 const mapStateToProps = (state) => {
   return {
     count: state.count.file,
-    file: state.file.file
+    file: state.file.file,
+    public: state.saveWallet.public,
+    private: state.saveWallet.private,
+    pkh: state.saveWallet.pkh,
+    mnemonic: state.saveWallet.mnemonic,
+    storeType: state.saveWallet.storeType,
+    hashArray: state.saveWallet.hashArray,
+    network: state.getNetwork.network
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    makeWallet: (newState) => dispatch({ type: "SAVE_FILE", state: newState })
+    changeActivationStatus: (newState) => dispatch({ type: "ACTIVATE_ACCOUNT", state: newState }),
+    changeRevealStatus: (newState) => dispatch({ type: "REVEAL_ACCOUNT", state: newState })
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Activate);
+
+
+// camera shop kitchen nuclear mass news brick half beach outer shield chat blame host gap
+// ruplxuwv.edfqicqp@tezos.example.org
+// qpUcKjxOAI
+//   "secret": "fa8e481afc56cc020ae027b7d0bcf732e539c360",
+  // "amount": "7483770027",
+  // "pkh": "tz1Uy5NhhNkH9R7E5hrCJ9agLYAXud5gqAVQ",

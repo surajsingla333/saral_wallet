@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Container, Row, Col, Form, Button} from 'react-bootstrap';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
 import Cookies from 'js-cookie';
 
-import { activateAccount } from '../../../../../API/src/activation/activateFundraiser';
-import { revealAccount } from '../../../../../API/src/reveal/reveal';
-import {sendTransaction} from '../../../../../API/src/transfer/send';
+import { activateAccount } from '../../../../../../API/src/activation/activateFundraiser';
+import { revealAccount } from '../../../../../../API/src/reveal/reveal';
+import { sendTransaction } from '../../../../../../API/src/transfer/send';
 
-import { decryptKeys } from '../../../../../API/src/encryption/decryptAES';
+import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
 
-import { accountBalance } from '../../../../../API/src/retrieveFunds/index';
+import { accountBalance } from '../../../../../../API/src/retrieveFunds/index';
 
-import SendFunds from './Transaction/SendFunds';
-import Activate from './Transaction/Activate';
-import Reveal from './Transaction/Reveal';
-
-class Body extends Component {
+class SendFunds extends Component {
   constructor(props) {
     super(props);
 
@@ -26,20 +22,9 @@ class Body extends Component {
     };
   }
 
-  componentWillMount() {
-    setTimeout(async () => {
-      var res = await accountBalance(this.state.network, Cookies.get('pkh'));
-      console.log("ACCOUNT BALANCE: ", res);
-    }, 500);
-
-  }
 
   componentDidMount() {
-    setTimeout(() => {
-      console.log("IN BODY PROPS", this.props);
-
-    }, 500);
-
+    console.log("IN SENDFUNDS PROPS", this.props);
   }
 
   activate(e) {
@@ -135,36 +120,35 @@ class Body extends Component {
   }
 
   render() {
-
-    var allComponents = [];
-
-    // if(localStorage == null)
-    // // Signup => New/JsonFile/Mnemonic/MnemonicFundraiser => Password => {set cookies}
-    // if(localStorage !== null)
-    // // Login => {set cookies}
-
-
     return (
       <Container>
         <Row>
-          <Col>
-            {this.props.children}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {Cookies.get("pkh")}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {this.buttons()}
-          </Col>
+          <Card style={{ width: '18rem', margin: '20px' }}>
+            <Card.Body>
+              <Card.Subtitle className="mb-2 text-muted">Send Amount</Card.Subtitle>
+              <Card.Text>
+
+                <Form onSubmit={this.send.bind(this)}>
+                  <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Receiver</Form.Label>
+                    <Form.Control type="text" placeholder="Enter fundraiser secret" ref="to" />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Amount</Form.Label>
+                    <Form.Control type="number" placeholder="Enter fundraiser secret" ref="value" />
+                  </Form.Group>
+                  <Button type="submit" variant="primary" ref="method" value="activate">
+                    Transfer
+        </Button>
+                </Form>
+
+              </Card.Text>
+            </Card.Body>
+          </Card>
         </Row>
       </Container>
     );
   }
-
 
   // main(){
   //   if(this.props.body){
@@ -190,11 +174,21 @@ class Body extends Component {
       return (
 
         <div>
-          <Activate/>
+          <Form onSubmit={this.activate.bind(this)}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Secret</Form.Label>
+              <Form.Control type="text" placeholder="Enter fundraiser secret" ref="secret" />
+            </Form.Group>
+            <Button type="submit" variant="primary" ref="method" value="activate">
+              Activate Account
+        </Button>
+          </Form>
           <hr></hr>
-          <Reveal/>
-        <hr></hr>
-        <SendFunds/>
+          <Button variant="primary" ref="method" value="reveal" onClick={this.reveal.bind(this)}>
+            Reveal Account
+        </Button>
+          <hr></hr>
+
 
         </div>
       )
@@ -222,7 +216,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Body);
+export default connect(mapStateToProps, mapDispatchToProps)(SendFunds);
 
 
 // camera shop kitchen nuclear mass news brick half beach outer shield chat blame host gap

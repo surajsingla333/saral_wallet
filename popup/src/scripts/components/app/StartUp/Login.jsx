@@ -8,7 +8,7 @@ import { calling } from '../../../../../../API/src/TESTING/send';
 
 import { checkHash } from '../../../../../../API/src/encryption/encryptBcrypt';
 import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
-import Body from '../Body';
+import Home from './Home';
 
 import * as Signups from '../Registration/index';
 
@@ -133,7 +133,7 @@ class Login extends Component {
 
     console.log("STATE", this.state);
     if (this.state.loggedIn) {
-      return (<Body />)
+      return (<Home />)
     }
 
     return (
