@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import Body from './Body';
 import Footer from './Footer';
@@ -31,7 +31,6 @@ class App extends Component {
 
   }
 
-
   componentWillMount() {
 
   }
@@ -53,31 +52,51 @@ class App extends Component {
 
   addAccount(e) {
     e.preventDefault();
+    console.log("CLICKING HEADER BUTTONS")
     this.setState({
       headerMenuAcc: true,
       headerMenuFundAcc: false,
     })
   }
 
+  backHome(e) {
+    e.preventDefault();
+    console.log("CLICKING HEADER Back BUTTONS")
+    this.setState({
+      headerMenuAcc: false,
+      headerMenuFundAcc: false,
+      GOTO_HOME: true,
+    })
+  }
+
   addFundraiserAccount(e) {
     e.preventDefault();
+    console.log("CLICKING HEADER BUTTONS")
     this.setState({
       headerMenuFundAcc: true,
       headerMenuAcc: false,
     })
   }
 
+  // getBalance(val){
+  //   console.log("GETTING BALANCE", val);
+  //   this.setState({
+  //     balance: val
+  //   })
+  // }
+
   render() {
     return (
-      <Container className="app">
+      <div className="app" style={{ width: '350px', height: '550px', testAlign: 'center' }}>
         <Row>
           <Col>
-            <Header addAccount={this.addAccount.bind(this)} addFundraiserAccount={this.addFundraiserAccount.bind(this)} />
+            <Header backHome={this.backHome.bind(this)} addAccount={this.addAccount.bind(this)} addFundraiserAccount={this.addFundraiserAccount.bind(this)} />
           </Col>
         </Row>
 
         <Row>
           <Col>
+          {/* getBalance={this.getBalance.bind(this)} */}
             <Body>
               {this.body()}
               {/* {this.addAccSetting()} */}
@@ -89,21 +108,50 @@ class App extends Component {
             <Footer />
           </Col>
         </Row>
-      </Container>
+      </div>
     );
   }
 
   body() {
-    if (this.props.data) {
-      if (this.state.cookieName) {
-        return (<Home/>)
+    if(this.state.GOTO_HOME) {
+      console.log("BODY IF FOR HOME")
+      this.state.GOTO_HOME = false;
+      // balance={this.state.balance}
+      return(<Home changeOptions="No Option"/>)
+    }
+    else if (!this.state.headerMenuAcc && !this.state.headerMenuFundAcc) {
+      console.log("BODY IF FOR LOGIN/SIGNUP/HOME")
+      if (this.props.data) {
+        if (this.state.cookieName) {
+          return (<Home />)
+        }
+        else {
+          return (<Login />);
+        }
       }
       else {
-        return (<Login />);
+        return (<Signup />);
       }
     }
     else {
-      return (<Signup />);
+      console.log("BODY ELSE FOR HEADERS ")
+      if (this.state.headerMenuAcc) {
+        return (
+          <Container>
+            <Row>
+              <AddAccount />
+            </Row>
+          </Container>
+        );
+      }
+      else if (this.state.headerMenuFundAcc) {
+        return (
+          <Container>
+            <Row>
+              <AddFundraiserAccount />
+            </Row>
+          </Container>);
+      }
     }
   }
 
@@ -112,17 +160,17 @@ class App extends Component {
       return (
         <Container>
           <Row>
-      <AddAccount />
-      </Row>
-      </Container>
+            <AddAccount />
+          </Row>
+        </Container>
       );
     }
     else if (this.state.headerMenuFundAcc) {
       return (
         <Container>
           <Row>
-        <AddFundraiserAccount />
-        </Row>
+            <AddFundraiserAccount />
+          </Row>
         </Container>);
     }
   }

@@ -92,10 +92,15 @@ class Header extends Component {
     return (
       <Container>
         <Row className="header">
+          <Col>
+            <Button type="secondary" onClick={this.props.backHome}>Back</Button>
+          </Col>
           <Col md={{ span: 10, offset: 1 }}>
             <h6>SARAL WALLET</h6>
-            {this.networkOptions(listOfAccounts)}
           </Col>
+        </Row>
+        <Row>
+        {this.networkOptions(listOfAccounts)}
         </Row>
       </Container>
     );

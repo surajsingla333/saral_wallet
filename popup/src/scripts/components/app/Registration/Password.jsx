@@ -8,7 +8,7 @@ import { calling } from '../../../../../../API/src/TESTING/send';
 import { genHash, checkHash } from '../../../../../../API/src/encryption/encryptBcrypt';
 import { encryptKeys } from '../../../../../../API/src/encryption/encryptAES';
 import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
-import Body from '../Body';
+import Home from '../StartUp/Home';
 import Cookies from 'js-cookie';
 
 class Password extends Component {

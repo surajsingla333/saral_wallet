@@ -28,8 +28,13 @@ class Body extends Component {
 
   componentWillMount() {
     setTimeout(async () => {
-      var res = await accountBalance(this.state.network, Cookies.get('pkh'));
+      var res = await accountBalance("https://conseil-dev.cryptonomic-infra.tech:443", Cookies.get('pkh'));
       console.log("ACCOUNT BALANCE: ", res);
+
+      this.setState({
+        balance: res.balance/(10**6)
+      })
+
     }, 500);
 
   }
@@ -136,7 +141,6 @@ class Body extends Component {
 
   render() {
 
-    var allComponents = [];
 
     // if(localStorage == null)
     // // Signup => New/JsonFile/Mnemonic/MnemonicFundraiser => Password => {set cookies}
@@ -145,6 +149,7 @@ class Body extends Component {
 
 
     return (
+      //  onLoad={this.props.getBalance(this.state.balance)}
       <Container>
         <Row>
           <Col>
@@ -154,11 +159,7 @@ class Body extends Component {
         <Row>
           <Col>
             {Cookies.get("pkh")}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {this.buttons()}
+            {this.state.balance}
           </Col>
         </Row>
       </Container>

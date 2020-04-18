@@ -25,7 +25,7 @@ class Home extends Component {
       file: "",
       stored: null,
       result: null,
-      option: '',
+      option: null,
       loggedIn: false,
       passHash: "",
       salt: "",
@@ -46,33 +46,36 @@ class Home extends Component {
 
 
   componentDidMount() {
-    // this.setState({file: localStorage.getItem("File Storage")});
-    // console.log(localStorage.getItem("File Storage"))
-    console.log("PROPS", this.props);
-    // console.log("COUNT", this.props.count);
-    // console.log("FILE", this.props.file);
-
-    // this.setState({
-    this.state.passHash = this.props.data.passwordHash;
-    this.state.salt = this.props.data.salt;
-    // })
-
-    console.log("STAE", this.state);
-    //  
-
-
-    calling();
-
-    console.log(this.state.result);
+    console.log("PROPS IN HOME", this.props);
   }
 
+  settingHomeBase(){
+
+    console.log("IN SETTING BASE");
+
+    this.setState({
+      option: null
+    })
+  }
 
   render() {
 
-    console.log("STATE", this.state);
+    console.log("STATE IN HOME", this.state);
+    console.log("Props IN HOME", this.props);
     // if (this.state.loggedIn) {
     //   return (<Body />)
     // }
+// No Option
+    if(this.props.changeOptions === "No Option"){
+      console.log("CHANGING OPTIONS")
+      
+      this.props.changeOptions = null;
+
+      this.setState({
+        option: null,
+      })
+      // this.state.;
+    }
 
     return (
       <div>
@@ -82,52 +85,65 @@ class Home extends Component {
     );
   }
 
-  mainCard(){
-    
-    <div>
-        <Card style={{ width: '18rem' }}>
-          <Card.Body>
-            <Card.Title>{Cookies.get('name')}</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">{Cookies.get('pkh')}</Card.Subtitle>
-            <Card.Text>
+  mainCard() {
+    if (!(this.state.option))
+    {
+      return (
+        <div>
+          <Card style={{ width: '18rem' }}>
+            <Card.Body>
+              <Card.Title>NAME : {Cookies.get('name')}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">{Cookies.get('pkh')}</Card.Subtitle>
+              <Card.Text>
+      {/* <h2>{this.props.balance}</h2> */}
 
-              <Container>
-                <Row>
-                  <Button variant="primary" onClick={(e) => { this.setState({ option: "SendFunds" }) }}>
-                    Send Tez
+                <Container>
+                  <Row>
+                    <Button variant="primary" onClick={(e) => { this.setState({ option: "SendFunds" }) }}>
+                      Send Tez
                   </Button>
-                </Row>
-                <Row>
-                  <Button variant="primary" onClick={(e) => { this.setState({ option: "Activate" }) }}>
-                    Activate Account
+                  </Row>
+                  <Row>
+                    <Button variant="primary" onClick={(e) => { this.setState({ option: "Activate" }) }}>
+                      Activate Account
                   </Button>
-                </Row>
-                <Row>
-                  <Button variant="primary" onClick={(e) => { this.setState({ option: "Reveal" }) }}>
-                    Reveal Account
+                  </Row>
+                  <Row>
+                    <Button variant="primary" onClick={(e) => { this.setState({ option: "Reveal" }) }}>
+                      Reveal Account
                   </Button>
 
-                </Row>
-              </Container>
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      </div>
+                  </Row>
+                </Container>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </div>
+      )
+    }
   }
 
   renderOption(option) {
     if (!option) {
       return <div></div>
     }
-    const HomeOption = HomeOptions[option];
+    else {
+      const HomeOption = HomeOptions[option];
 
-    return <HomeOption />
+      return <HomeOption />
+    }
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     data: state.getLocalStorage,
+    public: state.saveWallet.public,
+    private: state.saveWallet.private,
+    pkh: state.saveWallet.pkh,
+    mnemonic: state.saveWallet.mnemonic,
+    storeType: state.saveWallet.storeType,
+    hashArray: state.saveWallet.hashArray,
   }
 }
 
