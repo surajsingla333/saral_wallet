@@ -120,7 +120,7 @@ class Password extends Component {
 
       var hashAndSalt = genHash(p);
 
-      this.setState({ private: priv, public: pub, pkh: pkh2, mnemonic: mnemo, hashArray: hashAndSalt, storeType: this.props.storeType, });
+      this.setState({ private: priv, public: pub, pkh: pkh2, mnemonic: mnemo, hashArray: hashAndSalt, storeType: this.props.storeType, activated: this.props.activated});
 
       setTimeout(() => {
         console.log("STATE AFTER ENCRYPTION", this.state);
@@ -225,6 +225,7 @@ const mapStateToProps = (state) => {
     pkh: state.account.pkh,
     mnemonic: state.account.mnemonic,
     storeType: state.account.storeType,
+    activated: state.account.activated,
   }
 }
 

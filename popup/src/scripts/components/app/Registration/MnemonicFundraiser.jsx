@@ -73,6 +73,7 @@ class MnemonicFundraiser extends Component {
     var k = this.refs.privateKey.value;
     var pass = this.refs.password.value;
     var email = this.refs.email.value;
+    var secret = this.refs.secret.value;
 
     console.log(k.toString());
 
@@ -87,7 +88,7 @@ class MnemonicFundraiser extends Component {
 
     setTimeout(async () => {
 
-      let result = await unlockFundraiserIdentity(k.toString(), email.toString(), pass.toString());
+      let result = await unlockFundraiserIdentity(k.toString(), email.toString(), pass.toString(), secret.toString());
       // localStorage.setItem("USER WALLET", rr);
       console.log("result", result);
       console.log("result", typeof (result));
@@ -112,6 +113,7 @@ class MnemonicFundraiser extends Component {
           pkh: result.publicKeyHash,
           mnemonic: k.toString(),
           storeType: result.storeType,
+          activated: result.activated,
           gotoPassword: true,
         })
 
@@ -197,6 +199,11 @@ class MnemonicFundraiser extends Component {
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>password of fundraiser account</Form.Label>
                 <Form.Control type="password" placeholder="Enter password" ref="password" />
+              </Form.Group>
+
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>Secret (to activate the account)</Form.Label>
+                <Form.Control type="text" placeholder="Enter password" ref="secret" />
               </Form.Group>
 
               <Button variant="primary" type="submit">

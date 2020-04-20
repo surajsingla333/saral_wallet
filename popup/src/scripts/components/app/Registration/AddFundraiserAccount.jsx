@@ -22,6 +22,7 @@ class AddAccount extends Component {
       private: "",
       pkh: "",
       mnemonic: "",
+      activated: "",
       gotoBody: false
     }
   }
@@ -74,6 +75,7 @@ class AddAccount extends Component {
     var k = this.refs.privateKey.value;
     var pass = this.refs.password.value;
     var email = this.refs.email.value;
+    var secret = this.refs.secret.value;
 
     console.log(k.toString());
 
@@ -88,7 +90,7 @@ class AddAccount extends Component {
 
     setTimeout(async () => {
 
-      let result = await unlockFundraiserIdentity(k.toString(), email.toString(), pass.toString());
+      let result = await unlockFundraiserIdentity(k.toString(), email.toString(), pass.toString(), secret.toString());
       // localStorage.setItem("USER WALLET", rr);
       console.log("result", result);
       console.log("result", typeof (result));
@@ -111,6 +113,7 @@ class AddAccount extends Component {
         this.state.pkh = pkh2;
         this.state.mnemonic = mnemo;
         this.state.storeType = result.storeType;
+        this.state.activated = result.activated;
 
 
         // this.state.public = result.publicKey;
@@ -219,13 +222,20 @@ class AddAccount extends Component {
           <Form.Group controlId="exampleForm.ControlTextarea1">
             <Form.Control as="textarea" rows="3" ref="privateKey" />
           </Form.Group>
+          
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control type="email" placeholder="Enter email" ref="email" />
           </Form.Group>
+
           <Form.Group controlId="formBasicEmail">
             <Form.Label>password</Form.Label>
             <Form.Control type="password" placeholder="Enter password" ref="password" />
+          </Form.Group>
+
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Secret (to activate the account)</Form.Label>
+            <Form.Control type="text" placeholder="Enter password" ref="secret"/>
           </Form.Group>
 
           <Button variant="primary" type="submit">

@@ -101,6 +101,7 @@ class Json extends Component {
         console.log("PUBLIC", result.publicKeyHash);
         console.log("PUBLIC", result.privateKey);
         console.log("PUBLIC", result.publicKey);
+        console.log("PUBLIC", result.activated);
 
         this.setState({
           public: result.publicKey,
@@ -108,7 +109,8 @@ class Json extends Component {
           pkh: result.publicKeyHash,
           mnemonic: obj.mnemonic.join().split(",").join(" "),
           storeType: result.storeType,
-          gotoPassword: true
+          gotoPassword: true,
+          activated: result.activated,
         })
 
         console.log("SENDING", this.state);

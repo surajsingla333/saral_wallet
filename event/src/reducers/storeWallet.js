@@ -21,6 +21,7 @@ export default (state = initialState, action) => {
         mnemonic: action.state.mnemonic,
         hashArray: action.state.hashArray,
         storeType: action.state.storeType,
+        activated: action.state.activated,
       };
 
       var data = {
@@ -35,15 +36,8 @@ export default (state = initialState, action) => {
             private: newState.private,
             mnemonic: newState.mnemonic,
             storeType: newState.storeType,
-            active: {
-              "https://tezos-dev.cryptonomic-infra.tech:443/": false,
-              "https://conseil-dev.cryptonomic-infra.tech:443/": false
-            },
-            reveal: {
-              "https://tezos-dev.cryptonomic-infra.tech:443/": false,
-              "https://conseil-dev.cryptonomic-infra.tech:443/": false
+            activated: newState.activated,
             }
-          }
         ]
       }
 

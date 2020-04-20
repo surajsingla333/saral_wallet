@@ -3,7 +3,8 @@ const initialState = {
   private: "",
   pkh: "",
   mnemonic: "",
-  storeType: ''
+  storeType: '',
+  activated: ''
 };
 
 export default (state = initialState, action) => {
@@ -12,14 +13,30 @@ export default (state = initialState, action) => {
       console.log("IN SAVE_ACCOUNT");
       console.log("PAYLOAD", action);
       console.log("STATE", state);
-      return {
-        ...state,
-        public: action.state.public,
-        private: action.state.private,
-        pkh: action.state.pkh,
-        mnemonic: action.state.mnemonic,
-        storeType: action.state.storeType,
-      };
+      if(action.state.activated == true){
+        return {
+          ...state,
+          public: action.state.public,
+          private: action.state.private,
+          pkh: action.state.pkh,
+          mnemonic: action.state.mnemonic,
+          storeType: action.state.storeType,
+          activated: true,
+        };
+      }
+
+      else{
+        return {
+          ...state,
+          public: action.state.public,
+          private: action.state.private,
+          pkh: action.state.pkh,
+          mnemonic: action.state.mnemonic,
+          storeType: action.state.storeType,
+          activated: false,
+        };
+      }
+      s
     default:
       return state;
   }

@@ -28,7 +28,7 @@ class Body extends Component {
 
   componentWillMount() {
     setTimeout(async () => {
-      var res = await accountBalance("https://conseil-dev.cryptonomic-infra.tech:443", Cookies.get('pkh'));
+      var res = await accountBalance(Cookies.get("network"), Cookies.get('pkh'));
       console.log("ACCOUNT BALANCE: ", res);
 
       this.setState({

@@ -12,14 +12,31 @@ export default (state = initialState, action) => {
       console.log("PAYLOAD", action);
       console.log("STATE", state);
 
-      var newState = {
-        ...state,
-        public: action.state.public,
-        private: action.state.private,
-        pkh: action.state.pkh,
-        mnemonic: action.state.mnemonic,
-        storeType: action.state.storeType
-      };
+      var newState;
+
+      if(action.state.activated == true){
+        newState = {
+          ...state,
+          public: action.state.public,
+          private: action.state.private,
+          pkh: action.state.pkh,
+          mnemonic: action.state.mnemonic,
+          storeType: action.state.storeType,
+          activated: true,
+        };
+      }
+
+      else{
+        newState = {
+          ...state,
+          public: action.state.public,
+          private: action.state.private,
+          pkh: action.state.pkh,
+          mnemonic: action.state.mnemonic,
+          storeType: action.state.storeType,
+          activated: false,
+        };
+      }
 
       var stored = JSON.parse(localStorage.getItem("DATA"))
 
@@ -32,14 +49,7 @@ export default (state = initialState, action) => {
         private: newState.private,
         mnemonic: newState.mnemonic,
         storeType: newState.storeType,
-        active: {
-          "https://tezos-dev.cryptonomic-infra.tech:443/": false,
-          "https://conseil-dev.cryptonomic-infra.tech:443/": false
-        },
-        reveal: {
-          "https://tezos-dev.cryptonomic-infra.tech:443/": false,
-          "https://conseil-dev.cryptonomic-infra.tech:443/": false
-        }
+        activated: newState.activated,
       }
 
       stored.listAccountsNames.push(id);

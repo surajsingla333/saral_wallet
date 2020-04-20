@@ -9,6 +9,8 @@ import { TezosWalletUtil, StoreType } from 'conseiljs';
 //   "email": "zpbpnecc.uxgubkxw@tezos.example.org"
 // }
 
+import {activateAccount} from '../activation/activateFundraiser';
+
 
 export const initAccount = async function (faucetAccount) {
 
@@ -25,16 +27,34 @@ export const initAccount = async function (faucetAccount) {
   //   console.log("CATCH", err);
   //   return Promise.resolve("Invalid Wallet File");
   // })
+
+  console.log("FAUCET ACCOUNT", faucetAccount);
   try {
     var keystore = await TezosWalletUtil.unlockFundraiserIdentity(faucetAccount.mnemonic.join(' '), faucetAccount.email, faucetAccount.password, faucetAccount.pkh);
     console.log(`public key: ${keystore.publicKey}`);
     console.log(`secret key: ${keystore.privateKey}`);
     keystore['storeType'] = StoreType.Fundraiser;
     // alert("PUB" + `${keystore.publicKey}` + "\nPRIV", `${keystore.privateKey}`);
-    return (keystore);
+
+    console.log(faucetAccount.secret);
+    console.log("KEYSTORE", keystore);
+
+    try{
+      var activated = await activateAccount(keystore.publicKey, keystore.privateKey, keystore.publicKeyHash, keystore.storeType, faucetAccount.secret);
+
+      keystore['activated'] = activated;
+
+      return (keystore);
+
+    }
+
+    catch (err){
+      console.log("Error in activation. ", err);
+    }
+    // 
   }
-  catch{
-    console.log("Error");
+  catch(err){
+    console.log("Error in keystore. ", err);
     return ("err");
   }
 }
