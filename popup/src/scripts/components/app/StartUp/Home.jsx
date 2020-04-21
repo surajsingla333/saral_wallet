@@ -8,9 +8,12 @@ import { calling } from '../../../../../../API/src/TESTING/send';
 
 import { checkHash } from '../../../../../../API/src/encryption/encryptBcrypt';
 import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
+
 import Body from '../Body';
 
-import * as HomeOptions from '../Transaction/index';
+import Activate from '../Transaction/Activate';
+import Reveal from '../Transaction/Reveal';
+import SendFunds from '../Transaction/SendFunds';
 
 
 import Cookies from 'js-cookie';
@@ -31,6 +34,21 @@ class Home extends Component {
       salt: "",
     }
   }
+
+  
+  componentWillMount() {
+    setTimeout(async () => {
+      var res = await accountBalance(Cookies.get("network"), Cookies.get('pkh'));
+      console.log("ACCOUNT BALANCE: ", res);
+
+      this.setState({
+        balance: res.balance/(10**6)
+      })
+
+    }, 500);
+
+  }
+
 
   // componentWillMount() {
   //   let stored = localStorage.getItem("USER WALLET");
@@ -90,7 +108,7 @@ class Home extends Component {
     {
       return (
         <div>
-          <Card style={{ width: '18rem' }}>
+          <Card style={{ margin:'20px' }}>
             <Card.Body>
               <Card.Title>NAME : {Cookies.get('name')}</Card.Title>
               <Card.Subtitle className="mb-2 text-muted">{Cookies.get('pkh')}</Card.Subtitle>
@@ -128,9 +146,18 @@ class Home extends Component {
       return <div></div>
     }
     else {
-      const HomeOption = HomeOptions[option];
+      if (option == "SendFunds") {
+        return <SendFunds />
+      }
 
-      return <HomeOption />
+      if (option == "Reveal") {
+        return <Reveal />
+      }
+
+      if (option == "Activate") {
+        return <Activate />
+      }
+      
     }
   }
 }

@@ -10,20 +10,12 @@ class Footer extends Component {
   //   };
   // }
 
-  // componentDidMount() {
-  //   setInterval(() => {
-  //     this.setState({
-  //       count: this.state.count + 1
-  //     });
-  //   }, 1000);
-  // }
-
   render() {
     return (
-      <Container>
+      <Container style={{position: 'fixed', bottom: '0px', backgroundColor:"blue", textAlign:"center"}}>
         <Row>
           <Col>
-            <h1>Footer</h1>
+            <p style={{fontSize: '1px'}}>Footer</p>
           </Col>
         </Row>
       </Container>

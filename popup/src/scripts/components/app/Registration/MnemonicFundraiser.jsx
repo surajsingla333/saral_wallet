@@ -1,55 +1,51 @@
-import React, { Component } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import React, { Component } from 'react'
+import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import { unlockFundraiserIdentity } from '../../../../../../API/src/generatefromMnemonic/account';
-import { calling } from '../../../../../../API/src/TESTING/send';
-import { encryptKeys } from '../../../../../../API/src/encryption/encryptAES';
-import Password from './Password';
-
+import { unlockFundraiserIdentity } from '../../../../../../API/src/generatefromMnemonic/account'
+import { calling } from '../../../../../../API/src/TESTING/send'
+import { encryptKeys } from '../../../../../../API/src/encryption/encryptAES'
+import Password from './Password'
 
 class MnemonicFundraiser extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
       click: false,
       error: false,
-      public: "",
-      private: "",
-      pkh: "",
-      mnemonic: "",
+      public: '',
+      private: '',
+      pkh: '',
+      mnemonic: '',
       gotoPassword: false
     }
   }
 
-  componentWillMount() {
-    let stored = localStorage.getItem("USER WALLET");
-    console.log("stored", stored);
-    if (stored && stored !== "") {
-      console.log("IN IF", !stored);
-      console.log("IN IF 2", stored);
-      this.state.stored = JSON.parse(stored);
-      this.state.result = initAccount(this.state.stored);
+  componentWillMount () {
+    let stored = localStorage.getItem('USER WALLET')
+    console.log('stored', stored)
+    if (stored && stored !== '') {
+      console.log('IN IF', !stored)
+      console.log('IN IF 2', stored)
+      this.state.stored = JSON.parse(stored)
+      this.state.result = initAccount(this.state.stored)
     }
-    console.log("state", this.state);
+    console.log('state', this.state)
   }
 
-
-  componentDidMount() {
+  componentDidMount () {
     // this.setState({file: localStorage.getItem("File Storage")});
     // console.log(localStorage.getItem("File Storage"))
-    console.log("PROPS", this.props);
-    console.log("COUNT", this.props.count);
-    console.log("FILE", this.props.file);
-    //  
+    console.log('PROPS', this.props)
+    console.log('COUNT', this.props.count)
+    console.log('FILE', this.props.file)
+    //
 
+    calling()
 
-    calling();
-
-    console.log(this.state.result);
+    console.log(this.state.result)
     // let stored = localStorage.getItem("USER WALLET");
     // console.log("stored", stored);
     // if (stored !== "") {
@@ -60,46 +56,45 @@ class MnemonicFundraiser extends Component {
     // alert(this.props.file);
   }
 
-  addAccount(e) {
+  addAccount (e) {
+    e.preventDefault()
 
-    e.preventDefault();
+    this.state.click = true
 
-    this.state.click = true;
+    console.log('THIS PROPS', this.props)
 
-    console.log("THIS PROPS", this.props);
+    console.log('Getting from form', this.refs.privateKey)
 
-    console.log("Getting from form", this.refs.privateKey);
+    var k = this.refs.privateKey.value
+    var pass = this.refs.password.value
+    var email = this.refs.email.value
+    var secret = this.refs.secret.value
 
-    var k = this.refs.privateKey.value;
-    var pass = this.refs.password.value;
-    var email = this.refs.email.value;
-    var secret = this.refs.secret.value;
-
-    console.log(k.toString());
-
+    console.log(k.toString())
 
     // setTimeout(async () => {
 
-    console.log("GOT PRIVATE KEY TO ADD", k)
+    console.log('GOT PRIVATE KEY TO ADD', k)
 
     // this.state.file = rr;
 
-    console.log("CLICKED");
+    console.log('CLICKED')
 
     setTimeout(async () => {
-
-      let result = await unlockFundraiserIdentity(k.toString(), email.toString(), pass.toString(), secret.toString());
+      let result = await unlockFundraiserIdentity(
+        k.toString(),
+        email.toString(),
+        pass.toString(),
+        secret.toString()
+      )
       // localStorage.setItem("USER WALLET", rr);
-      console.log("result", result);
-      console.log("result", typeof (result));
+      console.log('result', result)
+      console.log('result', typeof result)
 
-      if (typeof (result) === 'object') {
-
-
-        console.log("PUBLICKEYHASH", result.publicKeyHash);
-        console.log("PRIVATE", result.privateKey);
-        console.log("PUBLIC", result.publicKey);
-
+      if (typeof result === 'object') {
+        console.log('PUBLICKEYHASH', result.publicKeyHash)
+        console.log('PRIVATE', result.privateKey)
+        console.log('PUBLIC', result.publicKey)
 
         // this.state.public = pub;
         // this.state.private = priv;
@@ -114,25 +109,20 @@ class MnemonicFundraiser extends Component {
           mnemonic: k.toString(),
           storeType: result.storeType,
           activated: result.activated,
-          gotoPassword: true,
+          gotoPassword: true
         })
 
-        console.log("SENDING", this.state);
+        console.log('SENDING', this.state)
 
-        this.props.addFundraiserAccWithMnemonic(this.state);
-
+        this.props.addFundraiserAccWithMnemonic(this.state)
+      } else if (typeof result === 'string') {
+        this.state.error = true
+      } else {
+        this.state.error = true
       }
-      else if (typeof (result) === 'string') {
-        this.state.error = true;
-      }
-      else {
-        this.state.error = true;
-      }
-    }, 500);
+    }, 500)
 
     // }, 500)
-
-
 
     // this.props.dispatch({
     //   type: "SAVE_FILE"
@@ -141,102 +131,105 @@ class MnemonicFundraiser extends Component {
     // chrome.storage.local.set({"FILE3": this.refs.file.files[0]})
   }
 
-
-  gotoPass() {
-    this.setState({ gotoPassword: true });
+  gotoPass () {
+    this.setState({ gotoPassword: true })
   }
 
-  render() {
-    console.log("IN RENDER", this.state);
+  render () {
+    console.log('IN RENDER', this.state)
 
     if (this.state.error === true) {
-      this.state.error = false;
-      alert("WRONG JSON FILE");
-      return (
-        <div>
-          {this.main()}
-        </div>
-      );
-    }
-
-    else if (this.state.gotoPassword === true) {
-      this.state.gotoPassword = false;
-      console.log("GOING TO PASWORD")
-      return (
-        <Password />
-      )
+      this.state.error = false
+      alert('WRONG JSON FILE')
+      return <div>{this.main()}</div>
+    } else if (this.state.gotoPassword === true) {
+      this.state.gotoPassword = false
+      console.log('GOING TO PASWORD')
+      return <Password />
       // alert("WRONG JSON FILE");
-    }
-    else if (this.state.click === false) {
-      console.log("IN ELSE");
-      return (
-        <div>
-          {this.main()}
-        </div>
-      );
-
+    } else if (this.state.click === false) {
+      console.log('IN ELSE')
+      return <div>{this.main()}</div>
     }
   }
 
-  main() {
+  main () {
     return (
-      <Container>
-        <Row>
-          <Col>
-            <h2>Enter mnemonic phrase</h2>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form onSubmit={this.addAccount.bind(this)}>
-              <Form.Group controlId="exampleForm.ControlTextarea1">
-                <Form.Control as="textarea" rows="3" ref="privateKey" />
-              </Form.Group>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email of fundraiser account</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" ref="email" />
-              </Form.Group>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Label>password of fundraiser account</Form.Label>
-                <Form.Control type="password" placeholder="Enter password" ref="password" />
-              </Form.Group>
+      <Card style={{ margin: '10px'}}>
+        <Card.Body style={{ padding: '10px'}}>
+          <Card.Title className='mb-2 text-muted' style={{ textAlign: 'center' }}>Fundraiser Wallet</Card.Title>
+          <Card.Text>
+            <Container>
+              <Row>
+                <Col>
+                  <h5>Enter mnemonic phrase</h5>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form onSubmit={this.addAccount.bind(this)}>
+                    <Form.Group controlId='exampleForm.ControlTextarea1'>
+                      <Form.Control as='textarea' rows='3' ref='privateKey' />
+                    </Form.Group>
+                    <Form.Group controlId='formBasicEmail'>
+                      <Form.Label>Email of fundraiser account</Form.Label>
+                      <Form.Control
+                        type='email'
+                        placeholder='Enter email'
+                        ref='email'
+                      />
+                    </Form.Group>
+                    <Form.Group controlId='formBasicEmail'>
+                      <Form.Label>password of fundraiser account</Form.Label>
+                      <Form.Control
+                        type='password'
+                        placeholder='Enter password'
+                        ref='password'
+                      />
+                    </Form.Group>
 
-              <Form.Group controlId="formBasicEmail">
-                <Form.Label>Secret (to activate the account)</Form.Label>
-                <Form.Control type="text" placeholder="Enter password" ref="secret" />
-              </Form.Group>
+                    <Form.Group controlId='formBasicEmail'>
+                      <Form.Label>Secret (to activate the account)</Form.Label>
+                      <Form.Control
+                        type='text'
+                        placeholder='Enter password'
+                        ref='secret'
+                      />
+                    </Form.Group>
 
-              <Button variant="primary" type="submit">
-                Submit
-          </Button>
-            </Form>
-          </Col>
-        </Row>
-      </Container>
-    );
+                    <hr></hr>
+
+                    <Button variant='primary' type='submit'>
+                      Submit
+                    </Button>
+                  </Form>
+                </Col>
+              </Row>
+            </Container>
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    )
   }
-
 }
 
-
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     count: state.count.file,
-    file: state.file.file,
+    file: state.file.file
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    addFundraiserAccWithMnemonic: (newState) => dispatch({ type: "SAVE_ACCOUNT", state: newState })
+    addFundraiserAccWithMnemonic: newState =>
+      dispatch({ type: 'SAVE_ACCOUNT', state: newState })
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MnemonicFundraiser);
+export default connect(mapStateToProps, mapDispatchToProps)(MnemonicFundraiser)
 
 // deputy kitten mobile since nest art jelly bubble truck ensure uphold parent artwork sweet approve blur spider trigger wealth travel margin north law soda
-
 
 // search hawk raven mass lens goddess nice infant wrestle chaos air eagle throw person muscle
 // xoxrntzn.itknteka@tezos.example.org

@@ -1,80 +1,75 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Container, Row, Col, Button } from 'react-bootstrap'
 
-import Body from './Body';
-import Footer from './Footer';
-import Header from './Header';
-import Signup from './StartUp/Signup';
-import Password from './Registration/Password';
-import Login from './StartUp/Login';
-import Home from './StartUp/Home';
+import Body from './Body'
+import Footer from './Footer'
+import Header from './Header'
+import Signup from './StartUp/Signup'
+import Password from './Registration/Password'
+import Login from './StartUp/Login'
+import Home from './StartUp/Home'
 
-import Cookies from 'js-cookie';
-import AddAccount from './Registration/AddAccount';
-import AddFundraiserAccount from './Registration/AddFundraiserAccount';
+import Cookies from 'js-cookie'
+import AddAccount from './Registration/AddAccount'
+import AddFundraiserAccount from './Registration/AddFundraiserAccount'
 
-import '../../../styles/app/index.css';
+// import '../../../styles/app/index.css'
 
 class App extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
-      cookieName: Cookies.get('name') ? Cookies.get('name') : "",
+      cookieName: Cookies.get('name') ? Cookies.get('name') : '',
       headerMenuAcc: false,
       bodyContent: true,
       headMenu: false,
-      headerMenuFundAcc: false,
+      headerMenuFundAcc: false
     }
-
   }
 
-  componentWillMount() {
+  componentWillMount () {}
 
-  }
-
-  componentDidMount() {
+  componentDidMount () {
     document.addEventListener('click', () => {
       this.props.dispatch({
         type: 'ADD_COUNT'
-      });
-    });
+      })
+    })
 
-    console.log("PROPS IN APP.jsx", this.props);
+    console.log('PROPS IN APP.jsx', this.props)
 
-    console.log("STATE IN APP>JSX", this.state);
+    console.log('STATE IN APP>JSX', this.state)
 
     Cookies.set('foo', 'bar')
-
   }
 
-  addAccount(e) {
-    e.preventDefault();
-    console.log("CLICKING HEADER BUTTONS")
+  addAccount (e) {
+    e.preventDefault()
+    console.log('CLICKING HEADER BUTTONS')
     this.setState({
       headerMenuAcc: true,
-      headerMenuFundAcc: false,
+      headerMenuFundAcc: false
     })
   }
 
-  backHome(e) {
-    e.preventDefault();
-    console.log("CLICKING HEADER Back BUTTONS")
+  backHome (e) {
+    e.preventDefault()
+    console.log('CLICKING HEADER Back BUTTONS')
     this.setState({
       headerMenuAcc: false,
       headerMenuFundAcc: false,
-      GOTO_HOME: true,
+      GOTO_HOME: true
     })
   }
 
-  addFundraiserAccount(e) {
-    e.preventDefault();
-    console.log("CLICKING HEADER BUTTONS")
+  addFundraiserAccount (e) {
+    e.preventDefault()
+    console.log('CLICKING HEADER BUTTONS')
     this.setState({
       headerMenuFundAcc: true,
-      headerMenuAcc: false,
+      headerMenuAcc: false
     })
   }
 
@@ -85,18 +80,25 @@ class App extends Component {
   //   })
   // }
 
-  render() {
+  render () {
     return (
-      <div className="app" style={{ width: '350px', height: '550px', testAlign: 'center' }}>
+      <div
+        className='app'
+        style={{ width: '350px', height: '550px', testAlign: 'center' }}
+      >
         <Row>
           <Col>
-            <Header backHome={this.backHome.bind(this)} addAccount={this.addAccount.bind(this)} addFundraiserAccount={this.addFundraiserAccount.bind(this)} />
+            <Header
+              backHome={this.backHome.bind(this)}
+              addAccount={this.addAccount.bind(this)}
+              addFundraiserAccount={this.addFundraiserAccount.bind(this)}
+            />
           </Col>
         </Row>
 
         <Row>
-          <Col>
-          {/* getBalance={this.getBalance.bind(this)} */}
+          <Col style={{height: '100%'}}>
+            {/* getBalance={this.getBalance.bind(this)} */}
             <Body>
               {this.body()}
               {/* {this.addAccSetting()} */}
@@ -109,32 +111,36 @@ class App extends Component {
           </Col>
         </Row>
       </div>
-    );
+    )
   }
 
-  body() {
-    if(this.state.GOTO_HOME) {
-      console.log("BODY IF FOR HOME")
-      this.state.GOTO_HOME = false;
-      // balance={this.state.balance}
-      return(<Home changeOptions="No Option"/>)
-    }
-    else if (!this.state.headerMenuAcc && !this.state.headerMenuFundAcc) {
-      console.log("BODY IF FOR LOGIN/SIGNUP/HOME")
+  body () {
+    if (this.state.GOTO_HOME) {
+      console.log('BODY IF FOR HOME')
+      this.state.GOTO_HOME = false
+
       if (this.props.data) {
         if (this.state.cookieName) {
-          return (<Home />)
+          return <Home />
+        } else {
+          return <Login />
         }
-        else {
-          return (<Login />);
+      } else {
+        return <Signup />
+      }
+    } else if (!this.state.headerMenuAcc && !this.state.headerMenuFundAcc) {
+      console.log('BODY IF FOR LOGIN/SIGNUP/HOME')
+      if (this.props.data) {
+        if (this.state.cookieName) {
+          return <Home />
+        } else {
+          return <Login />
         }
+      } else {
+        return <Signup />
       }
-      else {
-        return (<Signup />);
-      }
-    }
-    else {
-      console.log("BODY ELSE FOR HEADERS ")
+    } else {
+      console.log('BODY ELSE FOR HEADERS ')
       if (this.state.headerMenuAcc) {
         return (
           <Container>
@@ -142,20 +148,20 @@ class App extends Component {
               <AddAccount />
             </Row>
           </Container>
-        );
-      }
-      else if (this.state.headerMenuFundAcc) {
+        )
+      } else if (this.state.headerMenuFundAcc) {
         return (
           <Container>
             <Row>
               <AddFundraiserAccount />
             </Row>
-          </Container>);
+          </Container>
+        )
       }
     }
   }
 
-  addAccSetting() {
+  addAccSetting () {
     if (this.state.headerMenuAcc) {
       return (
         <Container>
@@ -163,23 +169,22 @@ class App extends Component {
             <AddAccount />
           </Row>
         </Container>
-      );
-    }
-    else if (this.state.headerMenuFundAcc) {
+      )
+    } else if (this.state.headerMenuFundAcc) {
       return (
         <Container>
           <Row>
             <AddFundraiserAccount />
           </Row>
-        </Container>);
+        </Container>
+      )
     }
   }
-
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    data: state.getLocalStorage,
+    data: state.getLocalStorage
     // count: state.count.count,
     // file: state.file.file
   }
@@ -191,4 +196,4 @@ const mapStateToProps = (state) => {
 //  )(Home);
 // //  export default HomeContainer;
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(App)

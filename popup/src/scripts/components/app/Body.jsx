@@ -26,19 +26,6 @@ class Body extends Component {
     };
   }
 
-  componentWillMount() {
-    setTimeout(async () => {
-      var res = await accountBalance(Cookies.get("network"), Cookies.get('pkh'));
-      console.log("ACCOUNT BALANCE: ", res);
-
-      this.setState({
-        balance: res.balance/(10**6)
-      })
-
-    }, 500);
-
-  }
-
   componentDidMount() {
     setTimeout(() => {
       console.log("IN BODY PROPS", this.props);
@@ -154,12 +141,6 @@ class Body extends Component {
         <Row>
           <Col>
             {this.props.children}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            {Cookies.get("pkh")}
-            {this.state.balance}
           </Col>
         </Row>
       </Container>

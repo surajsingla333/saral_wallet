@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Cookies from 'js-cookie';
 
-import { Container, Row, Col, Button, Form, ButtonGroup, ToggleButton, Navbar, NavDropdown, Nav, Dropdown, DropdownType, DropdownButton } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, Dropdown, DropdownButton } from 'react-bootstrap';
 import { decryptKeys } from '../../../../../API/src/encryption/decryptAES';
 // import '../../../styles/content/Header/index.css';
 
@@ -90,16 +90,16 @@ class Header extends Component {
     }
 
     return (
-      <Container>
+      <Container style={{backgroundColor:"blue", padding: '15px', textAlign:"center"}}>
         <Row className="header">
           <Col>
             <Button type="secondary" onClick={this.props.backHome}>Back</Button>
           </Col>
-          <Col md={{ span: 10, offset: 1 }}>
+          <Col style={{textAlign:"center"}}>
             <h6>SARAL WALLET</h6>
           </Col>
         </Row>
-        <Row>
+        <Row style={{marginTop: '10px'}}>
         {this.networkOptions(listOfAccounts)}
         </Row>
       </Container>

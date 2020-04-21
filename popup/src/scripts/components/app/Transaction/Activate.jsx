@@ -12,6 +12,9 @@ import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES'
 
 import { accountBalance } from '../../../../../../API/src/retrieveFunds/index'
 
+import Home from '../StartUp/Home';
+
+
 class Activate extends Component {
   constructor (props) {
     super(props)
@@ -74,7 +77,8 @@ class Activate extends Component {
   render () {
     if(this.state.changeState){
       console.log("STATE CHANGED");
-      return(<div>ACTIVATED</div>)
+      this.state.changeState = false
+      return(<Home />)
     }
     return (
       <Container>

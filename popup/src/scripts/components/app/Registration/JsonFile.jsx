@@ -1,53 +1,49 @@
-import React, { Component } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import React, { Component } from 'react'
+import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import { initAccount } from '../../../../../../API/src/registration/loadWallet';
-import { calling } from '../../../../../../API/src/TESTING/send';
-import Password from './Password';
-
+import { initAccount } from '../../../../../../API/src/registration/loadWallet'
+import { calling } from '../../../../../../API/src/TESTING/send'
+import Password from './Password'
 
 class Json extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
-      public: "",
-      private: "",
-      pkh: "",
-      mnemonic: "",
+      public: '',
+      private: '',
+      pkh: '',
+      mnemonic: '',
       gotoPassword: false,
-      error: false,
+      error: false
     }
   }
 
-  componentWillMount() {
-    let stored = localStorage.getItem("USER WALLET");
-    console.log("stored", stored);
-    if (stored && stored !== "") {
-      console.log("IN IF", !stored);
-      console.log("IN IF 2", stored);
-      this.state.stored = JSON.parse(stored);
-      this.state.result = initAccount(this.state.stored);
+  componentWillMount () {
+    let stored = localStorage.getItem('USER WALLET')
+    console.log('stored', stored)
+    if (stored && stored !== '') {
+      console.log('IN IF', !stored)
+      console.log('IN IF 2', stored)
+      this.state.stored = JSON.parse(stored)
+      this.state.result = initAccount(this.state.stored)
     }
-    console.log("state", this.state);
+    console.log('state', this.state)
   }
 
-
-  componentDidMount() {
+  componentDidMount () {
     // this.setState({file: localStorage.getItem("File Storage")});
     // console.log(localStorage.getItem("File Storage"))
-    console.log("PROPS", this.props);
-    console.log("COUNT", this.props.count);
-    console.log("FILE", this.props.file);
-    //  
+    console.log('PROPS', this.props)
+    console.log('COUNT', this.props.count)
+    console.log('FILE', this.props.file)
+    //
 
+    calling()
 
-    calling();
-
-    console.log(this.state.result);
+    console.log(this.state.result)
     // let stored = localStorage.getItem("USER WALLET");
     // console.log("stored", stored);
     // if (stored !== "") {
@@ -58,73 +54,70 @@ class Json extends Component {
     // alert(this.props.file);
   }
 
-  createWallet(e) {
+  createWallet (e) {
+    e.preventDefault()
+    console.log(this.refs.file)
+    console.log(this.refs.file.files)
+    console.log(this.refs.file.files[0])
+    var k = this.refs.file.files[0]
+    console.log(k.toString())
+    console.log(k.name)
 
-    e.preventDefault();
-    console.log(this.refs.file);
-    console.log(this.refs.file.files);
-    console.log(this.refs.file.files[0]);
-    var k = this.refs.file.files[0];
-    console.log(k.toString());
-    console.log(k.name);
+    let reader = new FileReader()
 
-    let reader = new FileReader();
+    reader.readAsText(k)
 
-    reader.readAsText(k);
-
-    let rr;
+    let rr
 
     reader.onload = function () {
-      rr = reader.result;
-      console.log(rr);
+      rr = reader.result
+      console.log(rr)
     }
 
     setTimeout(async () => {
-
-      console.log("GOT RR", rr)
+      console.log('GOT RR', rr)
 
       // this.state.file = rr;
 
-      console.log("CLICKED");
-      console.log(this.state);
-      console.log("RR", rr);
+      console.log('CLICKED')
+      console.log(this.state)
+      console.log('RR', rr)
 
-      let obj = JSON.parse(rr);
+      let obj = JSON.parse(rr)
 
-      let result = await initAccount(obj);
+      let result = await initAccount(obj)
 
       // localStorage.setItem("USER WALLET", rr);
-      console.log("result", result);
-      console.log("result", typeof (result));
+      console.log('result', result)
+      console.log('result', typeof result)
 
-      if (typeof (result) === 'object') {
-        console.log("PUBLIC", result.publicKeyHash);
-        console.log("PUBLIC", result.privateKey);
-        console.log("PUBLIC", result.publicKey);
-        console.log("PUBLIC", result.activated);
+      if (typeof result === 'object') {
+        console.log('PUBLIC', result.publicKeyHash)
+        console.log('PUBLIC', result.privateKey)
+        console.log('PUBLIC', result.publicKey)
+        console.log('PUBLIC', result.activated)
 
         this.setState({
           public: result.publicKey,
           private: result.privateKey,
           pkh: result.publicKeyHash,
-          mnemonic: obj.mnemonic.join().split(",").join(" "),
+          mnemonic: obj.mnemonic
+            .join()
+            .split(',')
+            .join(' '),
           storeType: result.storeType,
           gotoPassword: true,
-          activated: result.activated,
+          activated: result.activated
         })
 
-        console.log("SENDING", this.state);
+        console.log('SENDING', this.state)
         this.props.makeWallet(this.state)
-      }
-      else if (typeof (result) === 'string') {
-        this.state.error = true;
-      }
-      else {
-        this.state.error = true;
+      } else if (typeof result === 'string') {
+        this.state.error = true
+      } else {
+        this.state.error = true
       }
     }, 500)
-
-
 
     // this.props.dispatch({
     //   type: "SAVE_FILE"
@@ -133,42 +126,54 @@ class Json extends Component {
     // chrome.storage.local.set({"FILE3": this.refs.file.files[0]})
   }
 
-  render() {
+  render () {
     // if (this.state.stored === null) {
-    console.log("IN RENDER", this.state);
+    console.log('IN RENDER', this.state)
     if (this.state.error === true) {
-      this.state.error = false;
-      alert("WRONG JSON FILE");
-    }
-    else if (this.state.gotoPassword === true) {
-      this.state.gotoPassword = false;
-      return (
-        <Password />
-      )
+      this.state.error = false
+      alert('WRONG JSON FILE')
+    } else if (this.state.gotoPassword === true) {
+      this.state.gotoPassword = false
+      return <Password />
       // alert("WRONG JSON FILE");
     }
     return (
-      <Container>
-        <Row>
-          <Col>
-            <h2>Add your address.json file to load your wallet address.</h2>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form onSubmit={this.createWallet.bind(this)}>
-              <Form.Group controlId="input">
-                <Form.Control type="file" accept="application/JSON" ref="file" placeholder="Browse File" />
-              </Form.Group>
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
-            </Form>
-          </Col>
-        </Row>
-      </Container>
-
-    );
+      <Card style={{ margin: '20px', textAlign: 'center' }}>
+        <Card.Body>
+          <Card.Title className='mb-2 text-muted'>Fundraiser Wallet</Card.Title>
+          <Card.Text>
+            <Container>
+              <Row>
+                <Col>
+                  <h5>
+                    Add your address.json file to load your wallet address.
+                  </h5>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form onSubmit={this.createWallet.bind(this)}>
+                    <hr></hr>
+                    <Form.Group controlId='input'>
+                      <Form.Control
+                        type='file'
+                        accept='application/JSON'
+                        ref='file'
+                        placeholder='Browse File'
+                      />
+                    </Form.Group>
+                    <hr></hr>
+                    <Button variant='primary' type='submit'>
+                      Submit
+                    </Button>
+                  </Form>
+                </Col>
+              </Row>
+            </Container>
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    )
     // }
     // else if ((this.state.stored)) {
     //   return (
@@ -182,17 +187,17 @@ class Json extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     count: state.count.file,
     file: state.file.file
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    makeWallet: (newState) => dispatch({ type: "SAVE_ACCOUNT", state: newState })
+    makeWallet: newState => dispatch({ type: 'SAVE_ACCOUNT', state: newState })
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Json);
+export default connect(mapStateToProps, mapDispatchToProps)(Json)

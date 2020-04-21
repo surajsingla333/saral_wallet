@@ -1,59 +1,59 @@
-import React, { Component } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import React, { Component } from 'react'
+import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import { initAccount } from '../../../../../../API/src/registration/loadWallet';
-import { calling } from '../../../../../../API/src/TESTING/send';
-import { genHash, checkHash } from '../../../../../../API/src/encryption/encryptBcrypt';
-import { encryptKeys } from '../../../../../../API/src/encryption/encryptAES';
-import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
-import Home from '../StartUp/Home';
-import Cookies from 'js-cookie';
+import { initAccount } from '../../../../../../API/src/registration/loadWallet'
+import { calling } from '../../../../../../API/src/TESTING/send'
+import {
+  genHash,
+  checkHash
+} from '../../../../../../API/src/encryption/encryptBcrypt'
+import { encryptKeys } from '../../../../../../API/src/encryption/encryptAES'
+import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES'
+import Home from '../StartUp/Home'
+import Cookies from 'js-cookie'
 
 class Password extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
-      file: "",
+      file: '',
       stored: null,
       result: null,
-      ps: "",
+      ps: '',
       match: true,
-      gotoBody: false,
+      gotoBody: false
     }
   }
 
-  componentWillMount() {
-    let stored = localStorage.getItem("USER WALLET");
-    console.log("stored", stored);
-    if (stored && stored !== "") {
-      console.log("IN IF", !stored);
-      console.log("IN IF 2", stored);
-      this.state.stored = JSON.parse(stored);
-      this.state.result = initAccount(this.state.stored);
+  componentWillMount () {
+    let stored = localStorage.getItem('USER WALLET')
+    console.log('stored', stored)
+    if (stored && stored !== '') {
+      console.log('IN IF', !stored)
+      console.log('IN IF 2', stored)
+      this.state.stored = JSON.parse(stored)
+      this.state.result = initAccount(this.state.stored)
     }
-    console.log("state", this.state);
+    console.log('state', this.state)
   }
 
-
-  componentDidMount() {
+  componentDidMount () {
     // this.setState({file: localStorage.getItem("File Storage")});
     // console.log(localStorage.getItem("File Storage"))
     setTimeout(() => {
-      console.log("PROPS", this.props);
-      console.log("COUNT", this.props.count);
-      console.log("FILE", this.props.file);
-    }, 1000);
+      console.log('PROPS', this.props)
+      console.log('COUNT', this.props.count)
+      console.log('FILE', this.props.file)
+    }, 1000)
 
-    //  
+    //
 
+    calling()
 
-    calling();
-
-    console.log(this.state.result);
+    console.log(this.state.result)
     // let stored = localStorage.getItem("USER WALLET");
     // console.log("stored", stored);
     // if (stored !== "") {
@@ -64,96 +64,100 @@ class Password extends Component {
     // alert(this.props.file);
   }
 
-  createWallet(e) {
-    e.preventDefault();
-    console.log(this.refs.file);
-    console.log(this.refs.file.files);
-    console.log(this.refs.file.files[0]);
-    var k = this.refs.file.files[0];
-    console.log(k.toString());
-    console.log(k.name);
+  createWallet (e) {
+    e.preventDefault()
+    console.log(this.refs.file)
+    console.log(this.refs.file.files)
+    console.log(this.refs.file.files[0])
+    var k = this.refs.file.files[0]
+    console.log(k.toString())
+    console.log(k.name)
 
-    let reader = new FileReader();
+    let reader = new FileReader()
 
-    reader.readAsText(k);
+    reader.readAsText(k)
 
-    let rr;
+    let rr
 
     reader.onload = function () {
-      rr = reader.result;
-      console.log(rr);
+      rr = reader.result
+      console.log(rr)
     }
 
     setTimeout(() => {
+      console.log('GOT RR', rr)
 
-      console.log("GOT RR", rr)
+      this.state.file = rr
 
-      this.state.file = rr;
+      console.log('CLICKED')
+      console.log(this.state)
+      console.log('RR', rr)
+      this.props.makeWallet(this.state)
 
-      console.log("CLICKED");
-      console.log(this.state);
-      console.log("RR", rr);
-      this.props.makeWallet(this.state);
-
-      let obj = JSON.parse(rr);
-      localStorage.setItem("USER WALLET", rr);
-
+      let obj = JSON.parse(rr)
+      localStorage.setItem('USER WALLET', rr)
     }, 500)
   }
 
-  setPassword(e) {
-    e.preventDefault();
+  setPassword (e) {
+    e.preventDefault()
     if (this.state.ps !== this.refs.repassword.value) {
-      this.setState({ match: false });
-      return "Different passwords"
-    }
-    else {
-      console.log("PASSWORD SET");
-      var p = this.state.ps;
+      this.setState({ match: false })
+      return 'Different passwords'
+    } else {
+      console.log('PASSWORD SET')
+      var p = this.state.ps
 
-      console.log("tHIS SET PASSWORD", this.props);
+      console.log('tHIS SET PASSWORD', this.props)
 
-      var pub = encryptKeys(this.props.public, p);
-      var priv = encryptKeys(this.props.private, p);
-      var pkh2 = encryptKeys(this.props.pkh, p);
-      var mnemo = encryptKeys(this.props.mnemonic, p);
+      var pub = encryptKeys(this.props.public, p)
+      var priv = encryptKeys(this.props.private, p)
+      var pkh2 = encryptKeys(this.props.pkh, p)
+      var mnemo = encryptKeys(this.props.mnemonic, p)
 
-      var hashAndSalt = genHash(p);
+      var hashAndSalt = genHash(p)
 
-      this.setState({ private: priv, public: pub, pkh: pkh2, mnemonic: mnemo, hashArray: hashAndSalt, storeType: this.props.storeType, activated: this.props.activated});
+      this.setState({
+        private: priv,
+        public: pub,
+        pkh: pkh2,
+        mnemonic: mnemo,
+        hashArray: hashAndSalt,
+        storeType: this.props.storeType,
+        activated: this.props.activated
+      })
 
       setTimeout(() => {
-        console.log("STATE AFTER ENCRYPTION", this.state);
-        console.log("THIS PROPS INS SET PASSWORD", this.props);
-        this.props.storeData(this.state);
-        
+        console.log('STATE AFTER ENCRYPTION', this.state)
+        console.log('THIS PROPS INS SET PASSWORD', this.props)
+        this.props.storeData(this.state)
 
-        var inThirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000);
+        var inThirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000)
 
-        Cookies.set("password", p, {
+        Cookies.set('password', p, {
           expires: inThirtyMinutes
-        });
-        Cookies.set("pkh", this.props.pkh, {
+        })
+        Cookies.set('pkh', this.props.pkh, {
           expires: inThirtyMinutes
-        });
-        Cookies.set("publicKey", pub, {
+        })
+        Cookies.set('publicKey', pub, {
           expires: inThirtyMinutes
-        });
-        Cookies.set("privateKey", priv, {
+        })
+        Cookies.set('privateKey', priv, {
           expires: inThirtyMinutes
-        });
-        Cookies.set("name", "ACCOUNT 1", {
+        })
+        Cookies.set('name', 'ACCOUNT 1', {
           expires: inThirtyMinutes
-        });
-        Cookies.set("storeType", this.props.storeType, {
+        })
+        Cookies.set('storeType', this.props.storeType, {
           expires: inThirtyMinutes
-        });
+        })
 
         this.setState({
           loggedIn: true,
           gotoBody: true
         })
-      }, 200);
+      }, 200)
 
       // var r = genHash(p); // generating hash
       // console.log("res", r);
@@ -169,54 +173,73 @@ class Password extends Component {
       // var l = decryptKeys(m[1]);
       // console.log("AES DECRYPT", k, "\n", l);
     }
-
   }
 
-  render() {
+  render () {
     if (this.state.gotoBody && this.state.loggedIn) {
-      this.state.gotoBody = false;
-      return (
-        <Home />
-      )
+      this.state.gotoBody = false
+      return <Home />
     }
     return (
-      <Container>
-        <Row>
-        <Col>
-        <Form onSubmit={this.setPassword.bind(this)}>
-          <Form.Group controlId="input">
-            <Form.Label>Enter your password</Form.Label>
-            <Form.Control type="password" ref="password" placeholder="Your password" onBlur={(e) => { this.setState({ ps: this.refs.password.value }) }} />
-          </Form.Group>
-          <Form.Group controlId="input">
-            <Form.Label>Re-enter your password</Form.Label>
-            <Form.Control type="password" ref="repassword" placeholder="Must be same as above" onBlur={(e) => {
-              if (this.refs.repassword.value === this.state.ps) {
-                this.setState({ match: true })
-                console.log("CORRECT", this.state);
-              }
-              else {
-                this.setState({ match: false })
-                console.log("WRONG", this.state);
-              }
-            }} />
-            {!(this.state.match) ?
-              <Form.Control.Feedback>Password does not match</Form.Control.Feedback> : <div></div>
-            }
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Submit
-  </Button>
-        </Form>
-        </Col>
-        </Row>
-      </Container>
-    );
+      <Card style={{ margin: '20px', textAlign: 'center' }}>
+        <Card.Body>
+          <Card.Title className='mb-2 text-muted'>Set Password for Saral Wallet</Card.Title>
+          <Card.Text>
+            <Container>
+              <Row>
+                <Col>
+                  <Form onSubmit={this.setPassword.bind(this)}>
+                    <Form.Group controlId='input'>
+                      <Form.Label>Enter your password</Form.Label>
+                      <Form.Control
+                        type='password'
+                        ref='password'
+                        placeholder='Your password'
+                        onBlur={e => {
+                          this.setState({ ps: this.refs.password.value })
+                        }}
+                      />
+                    </Form.Group>
+                    <Form.Group controlId='input'>
+                      <Form.Label>Re-enter your password</Form.Label>
+                      <Form.Control
+                        type='password'
+                        ref='repassword'
+                        placeholder='Must be same as above'
+                        onBlur={e => {
+                          if (this.refs.repassword.value === this.state.ps) {
+                            this.setState({ match: true })
+                            console.log('CORRECT', this.state)
+                          } else {
+                            this.setState({ match: false })
+                            console.log('WRONG', this.state)
+                          }
+                        }}
+                      />
+                      {!this.state.match ? (
+                        <Form.Control.Feedback>
+                          Password does not match
+                        </Form.Control.Feedback>
+                      ) : (
+                        <div></div>
+                      )}
+                    </Form.Group>
+                    <hr></hr>
+                    <Button variant='primary' type='submit'>
+                      Submit
+                    </Button>
+                  </Form>
+                </Col>
+              </Row>
+            </Container>
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    )
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     count: state.count.file,
     file: state.file.file,
@@ -225,14 +248,14 @@ const mapStateToProps = (state) => {
     pkh: state.account.pkh,
     mnemonic: state.account.mnemonic,
     storeType: state.account.storeType,
-    activated: state.account.activated,
+    activated: state.account.activated
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    storeData: (newState) => dispatch({ type: "SAVE_WALLET", state: newState })
+    storeData: newState => dispatch({ type: 'SAVE_WALLET', state: newState })
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Password);
+export default connect(mapStateToProps, mapDispatchToProps)(Password)
