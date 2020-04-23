@@ -9,7 +9,7 @@ const network = 'carthagenet';
 const entity = 'accounts';
 
 
-export const accountBalance = async function (node, address) {
+export const accountBalance = async function (address, node="https://conseil-dev.cryptonomic-infra.tech:443") {
 
   console.log("GETTING BALANCE\n", node, "\n", address,"\n", API);
 

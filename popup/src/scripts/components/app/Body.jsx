@@ -10,8 +10,6 @@ import {sendTransaction} from '../../../../../API/src/transfer/send';
 
 import { decryptKeys } from '../../../../../API/src/encryption/decryptAES';
 
-import { accountBalance } from '../../../../../API/src/retrieveFunds/index';
-
 import SendFunds from './Transaction/SendFunds';
 import Activate from './Transaction/Activate';
 import Reveal from './Transaction/Reveal';

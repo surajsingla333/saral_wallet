@@ -1,54 +1,50 @@
-import React, { Component } from 'react';
-import { Form, Card, Button, Container, Row, Col } from 'react-bootstrap';
+import React, { Component } from 'react'
+import { Form, Card, Button, Container, Row, Col } from 'react-bootstrap'
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 
-import { initAccount } from '../../../../../../API/src/registration/loadWallet';
-import { calling } from '../../../../../../API/src/TESTING/send';
+import { initAccount } from '../../../../../../API/src/registration/loadWallet'
+import { calling } from '../../../../../../API/src/TESTING/send'
 
-import { checkHash } from '../../../../../../API/src/encryption/encryptBcrypt';
-import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
+import { checkHash } from '../../../../../../API/src/encryption/encryptBcrypt'
+import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES'
+import { accountBalance } from '../../../../../../API/src/retrieveFunds/index';
+// '../../../../../API/src/retrieveFunds/index';
 
-import Body from '../Body';
+import Body from '../Body'
 
-import Activate from '../Transaction/Activate';
-import Reveal from '../Transaction/Reveal';
-import SendFunds from '../Transaction/SendFunds';
+import Activate from '../Transaction/Activate'
+import Reveal from '../Transaction/Reveal'
+import SendFunds from '../Transaction/SendFunds'
+import Delegate from '../Transaction/Delegate'
 
-
-import Cookies from 'js-cookie';
-
+import Cookies from 'js-cookie'
 
 class Home extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
-      file: "",
+      file: '',
       stored: null,
       result: null,
       option: null,
       loggedIn: false,
-      passHash: "",
-      salt: "",
+      passHash: '',
+      salt: ''
     }
   }
 
-  
-  componentWillMount() {
+  componentWillMount () {
     setTimeout(async () => {
-      var res = await accountBalance(Cookies.get("network"), Cookies.get('pkh'));
-      console.log("ACCOUNT BALANCE: ", res);
+      var res = await accountBalance(Cookies.get('pkh'))
+      console.log('ACCOUNT BALANCE: ', res)
 
       this.setState({
-        balance: res.balance/(10**6)
+        balance: res.balance / 10 ** 6
       })
-
-    }, 500);
-
+    }, 500)
   }
-
 
   // componentWillMount() {
   //   let stored = localStorage.getItem("USER WALLET");
@@ -62,35 +58,32 @@ class Home extends Component {
   //   console.log("state", this.state);
   // }
 
-
-  componentDidMount() {
-    console.log("PROPS IN HOME", this.props);
+  componentDidMount () {
+    console.log('PROPS IN HOME', this.props)
   }
 
-  settingHomeBase(){
-
-    console.log("IN SETTING BASE");
+  settingHomeBase () {
+    console.log('IN SETTING BASE')
 
     this.setState({
       option: null
     })
   }
 
-  render() {
-
-    console.log("STATE IN HOME", this.state);
-    console.log("Props IN HOME", this.props);
+  render () {
+    console.log('STATE IN HOME', this.state)
+    console.log('Props IN HOME', this.props)
     // if (this.state.loggedIn) {
     //   return (<Body />)
     // }
-// No Option
-    if(this.props.changeOptions === "No Option"){
-      console.log("CHANGING OPTIONS")
-      
-      this.props.changeOptions = null;
+    // No Option
+    if (this.props.changeOptions === 'No Option') {
+      console.log('CHANGING OPTIONS')
+
+      this.props.changeOptions = null
 
       this.setState({
-        option: null,
+        option: null
       })
       // this.state.;
     }
@@ -100,37 +93,47 @@ class Home extends Component {
         {this.mainCard()}
         {this.renderOption(this.state.option)}
       </div>
-    );
+    )
   }
 
-  mainCard() {
-    if (!(this.state.option))
-    {
+  mainCard () {
+    if (!this.state.option) {
       return (
         <div>
-          <Card style={{ margin:'20px' }}>
+          <Card style={{ margin: '20px' }}>
             <Card.Body>
               <Card.Title>NAME : {Cookies.get('name')}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">{Cookies.get('pkh')}</Card.Subtitle>
+              <Card.Subtitle className='mb-2 text-muted'>
+                {Cookies.get('pkh')}
+              </Card.Subtitle>
               <Card.Text>
-      {/* <h2>{this.props.balance}</h2> */}
+                {/* <h2>{this.props.balance}</h2> */}
 
                 <Container>
                   <Row>
-                    <Button variant="primary" onClick={(e) => { this.setState({ option: "SendFunds" }) }}>
-                      Send Tez
-                  </Button>
+                    <Col>
+                      <Button
+                        variant='primary'
+                        onClick={e => {
+                          this.setState({ option: 'SendFunds' })
+                        }}
+                      >
+                        Send Tez
+                      </Button>
+                    </Col>
                   </Row>
+                  {this.getActivate()}
                   <Row>
-                    <Button variant="primary" onClick={(e) => { this.setState({ option: "Activate" }) }}>
-                      Activate Account
-                  </Button>
-                  </Row>
-                  <Row>
-                    <Button variant="primary" onClick={(e) => { this.setState({ option: "Reveal" }) }}>
-                      Reveal Account
-                  </Button>
-
+                    <Col>
+                      <Button
+                        variant='primary'
+                        onClick={e => {
+                          this.setState({ option: 'Delegate' })
+                        }}
+                      >
+                        Delegate
+                      </Button>
+                    </Col>
                   </Row>
                 </Container>
               </Card.Text>
@@ -141,28 +144,52 @@ class Home extends Component {
     }
   }
 
-  renderOption(option) {
+  getActivate () {
+    var stored = JSON.parse(localStorage.getItem('DATA'))
+    if (
+      !stored.accounts[stored.listAccountsNames.indexOf(Cookies.get('name'))]
+        .activated
+    ) {
+      return (
+        <Row>
+          <Col>
+            <Button
+              variant='primary'
+              onClick={e => {
+                this.setState({ option: 'Activate' })
+              }}
+            >
+              Activate Account
+            </Button>
+          </Col>
+        </Row>
+      )
+    }
+
+    else {
+      return(<Row></Row>)
+    }
+  }
+
+  renderOption (option) {
     if (!option) {
       return <div></div>
-    }
-    else {
-      if (option == "SendFunds") {
+    } else {
+      if (option == 'SendFunds') {
         return <SendFunds />
       }
 
-      if (option == "Reveal") {
-        return <Reveal />
-      }
-
-      if (option == "Activate") {
+      else if (option == 'Activate') {
         return <Activate />
       }
-      
+      else if (option == 'Delegate') {
+        return <Delegate />
+      }
     }
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     data: state.getLocalStorage,
     public: state.saveWallet.public,
@@ -170,15 +197,15 @@ const mapStateToProps = (state) => {
     pkh: state.saveWallet.pkh,
     mnemonic: state.saveWallet.mnemonic,
     storeType: state.saveWallet.storeType,
-    hashArray: state.saveWallet.hashArray,
+    hashArray: state.saveWallet.hashArray
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    makeWallet: (newState) => dispatch({ type: "SAVE_FILE", state: newState })
+    makeWallet: newState => dispatch({ type: 'SAVE_FILE', state: newState })
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
 7
