@@ -15,7 +15,8 @@
   },
   "permissions": [
     "storage",
-    "notifications"
+    "notifications",
+    "tabs"
   ],
   "content_scripts": [
     {
@@ -27,5 +28,8 @@
         "content.js"
       ]
     }
+  ],
+  "web_accessible_resources": [
+    "api.js"
   ]
 }

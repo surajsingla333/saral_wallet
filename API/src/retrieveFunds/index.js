@@ -1,4 +1,4 @@
-import { API } from '../../myAPIkey';
+import { TestNet } from '../../myAPIkey';
 
 
 import { ConseilDataClient, ConseilQueryBuilder, ConseilOperator, ConseilFunction, TezosConseilClient } from 'conseiljs';
@@ -11,9 +11,9 @@ const entity = 'accounts';
 
 export const accountBalance = async function (address, node="https://conseil-dev.cryptonomic-infra.tech:443") {
 
-  console.log("GETTING BALANCE\n", node, "\n", address,"\n", API);
+  console.log("GETTING BALANCE\n", node, "\n", address,"\n", TestNet.API);
 
-  const conseilServer = { url: node, apiKey: API, network };
+  const conseilServer = { url: node, apiKey: TestNet.API, network };
 
   let accountQuery = ConseilQueryBuilder.blankQuery();
   accountQuery = ConseilQueryBuilder.addFields(accountQuery, 'manager', 'balance');

@@ -43,7 +43,4 @@ module.exports = {
     ]
 
   }
-  // externals: {
-  //   fs: "commonjs fs",
-  // }
 };

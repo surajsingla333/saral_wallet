@@ -81,11 +81,13 @@ class App extends Component {
   // }
 
   render () {
+    if(this.props.count%2){
     return (
       <div
         className='app'
         style={{ width: '350px', height: '550px', testAlign: 'center' }}
       >
+        <h1>{this.props.count}</h1>
         <Row>
           <Col>
             <Header
@@ -112,6 +114,10 @@ class App extends Component {
         </Row>
       </div>
     )
+    }
+    else{
+    return(<h1>{this.props.count} EVEN</h1>)
+    }
   }
 
   body () {
@@ -184,8 +190,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    data: state.getLocalStorage
-    // count: state.count.count,
+    data: state.getLocalStorage,
+    count: state.count.count,
     // file: state.file.file
   }
 }
