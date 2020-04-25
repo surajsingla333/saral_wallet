@@ -1,72 +1,3 @@
-// class App extends Component {
-//   constructor (props) {
-//     super(props)
-
-//     this.state = {}
-//   }
-
-//   insideExtension (val) {
-//     console.log('INSIDE FN', val)
-//     console.log('INSIDE CONTENT')
-//     alert('ALERTING')
-//   }
-
-//   componentDidMount () {
-
-//     window.chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-//       if (message.type === "OYO_PLUGIN_EVALUATED_CONFIG") {
-//         this.setState({
-//           configData: message.configData
-//         });
-//       }
-//     });
-
-//     // window.addEventListener("message", function(e) {
-
-//     //   // alert('aaaa');
-
-//     //   if (e.source != window) {
-//     //       return;
-//     //   }
-
-//     //   console.log(e);
-//     //   console.log(e.data);
-
-//     //   // var data = JSON.parse(e.data);
-
-//     //   this.insideExtension(e.data);
-//     //   // this.insideExtension(data);
-
-//     // });
-
-//     // window.onload("message", function(event) {
-//     //   // We only accept messages from ourselves
-
-//     //   window.postMessage("SURAJ");
-
-//     // }, false);
-
-//     console.log(window)
-//     console.log('GET ETH', window.window)
-//     console.log('GET ETH2', window.window.ethereum)
-//     // () =>{
-//     // alert("Calling extension function from page");
-//     // }
-
-//     // var data = {
-//     // random: 'Some data',
-//     // more: 'More data'
-//     // }
-
-//     // send data through a DOM event
-//     window.document.cookie = 'MY COOKIE IN PAGE:trueAF'
-//     // console.log('doc', window.document.cookies)
-//     console.log('URL', window.document['URL'])
-//     // var event = new Event('csEvent');
-//     // window.document.dispatchEvent(event);
-
-//   }
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
@@ -76,9 +7,15 @@ import { listEntities } from '../../../../../API/src/_INITIALIZE/3_GetEntities'
 import { listAttributes } from '../../../../../API/src/_INITIALIZE/4_EntityAttributes'
 import { listAttributeValues } from '../../../../../API/src/_INITIALIZE/5_AttributeValue'
 
+import Cookies from 'js-cookie';
+
 class App extends Component {
   constructor (props) {
     super(props)
+
+    this.state = {
+      value: "ME VALUE",
+    }
   }
 
   componentWillMount () {
@@ -106,32 +43,38 @@ class App extends Component {
   }
 
   componentDidMount () {
-    document.addEventListener('click', () => {
-      this.callEvent()
+    // document.addEventListener('click', () => {
+    //   this.callEvent()
 
-      this.props.dispatch({
-        type: 'ADD_COUNT'
-      })
-    })
+    //   this.props.dispatch({
+    //     type: 'ADD_COUNT'
+    //   })
+    // })
 
-    document.addEventListener('my_event', () => {
+    document.addEventListener('my_event', (e) => {
       alert('PRINT')
-      this.callEvent;
+      console.log(e);
+      this.callEvent(e.detail);
     })
+
+    var VAL = this.state.value;
 
     var elt = document.createElement('script')
     elt.innerHTML = `window.tezos = {
-      bar:function() {
+      bar:function(work) {
         console.log("IN FOO:BARR")/*whatever*/
-        var event = new Event("my_event");
+        var event = new CustomEvent("my_event", {detail: work});
         document.dispatchEvent(event);
       }, 
       isTezos: true,
+      account: ` + JSON.stringify(Cookies.get('name')) + `,
+      value:` + JSON.stringify(this.state.value) + `
     };`
     document.head.appendChild(elt)
   }
 
-  callEvent () {
+  callEvent (v) {
+    console.log("GOT DATA", v)
     console.log('EVENT Call')
     alert('SECOND ALERT')
   }
@@ -139,6 +82,7 @@ class App extends Component {
   render () {
     return (
       <div>
+        {Cookies.get("name")};
         <h1>Count: {this.props.count}</h1>
       </div>
     )

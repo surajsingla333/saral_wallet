@@ -1,6 +1,7 @@
 import {TezosNodeWriter} from 'conseiljs';
+import {TestNet} from '../../myAPIkey';
 
-export const sendTransaction = async function(_public, _private, _pkh, _storeType, _node, _receiver, _value, _fee=1500, _path="") {
+export const sendTransaction = async function(_public, _private, _pkh, _storeType, _receiver, _value, _fee=1500, _path="") {
 
     const keystore = {
         publicKey: _public,
@@ -11,7 +12,7 @@ export const sendTransaction = async function(_public, _private, _pkh, _storeTyp
     };
 
     try{
-      const result = await TezosNodeWriter.sendTransactionOperation(_node, keystore, _receiver, _value, _fee, _path);
+      const result = await TezosNodeWriter.sendTransactionOperation(TestNet.TezosNode, keystore, _receiver, _value, _fee, _path);
       console.log(`Injected operation group id ${result.operationGroupID}`);
       if(result.operationGroupID){
         return true;

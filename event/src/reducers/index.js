@@ -10,6 +10,7 @@ import acivate from './activateStatus';
 import reveal from './revealStatus';
 import saveWallet from './storeWallet';
 import changeBody from './changeBody';
+import _updateState from './_updateState';
 
 
 export default combineReducers({
@@ -22,5 +23,6 @@ export default combineReducers({
   acivate: acivate,
   reveal: reveal,
   saveWallet: saveWallet,
-  changeBody: changeBody
+  changeBody: changeBody,
+  updateState: _updateState
 });

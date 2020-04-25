@@ -25,7 +25,8 @@ class App extends Component {
       headerMenuAcc: false,
       bodyContent: true,
       headMenu: false,
-      headerMenuFundAcc: false
+      headerMenuFundAcc: false,
+      update: false
     }
   }
 
@@ -33,10 +34,8 @@ class App extends Component {
 
   componentDidMount () {
     document.addEventListener('click', () => {
-      this.props.dispatch({
-        type: 'ADD_COUNT'
-      })
-    })
+      this.props.counting();
+    });
 
     console.log('PROPS IN APP.jsx', this.props)
 
@@ -79,21 +78,29 @@ class App extends Component {
   //     balance: val
   //   })
   // }
+  updateHome(){
+    // e.preventDefault()
+    console.log("INSIDE UPDATE HOME FROM HEADER");
+    this.setState({
+      update: Cookies.get('name'),
+    })
+    console.log("CALLING DISPATCH FROM APP");
+    this.props.stateUpdate(this.state);
+  };
 
   render () {
-    if(this.props.count%2){
     return (
       <div
         className='app'
         style={{ width: '350px', height: '550px', testAlign: 'center' }}
       >
-        <h1>{this.props.count}</h1>
         <Row>
           <Col>
             <Header
               backHome={this.backHome.bind(this)}
               addAccount={this.addAccount.bind(this)}
               addFundraiserAccount={this.addFundraiserAccount.bind(this)}
+              updateHome={this.updateHome.bind(this)}
             />
           </Col>
         </Row>
@@ -114,10 +121,6 @@ class App extends Component {
         </Row>
       </div>
     )
-    }
-    else{
-    return(<h1>{this.props.count} EVEN</h1>)
-    }
   }
 
   body () {
@@ -194,12 +197,13 @@ const mapStateToProps = state => {
     count: state.count.count,
     // file: state.file.file
   }
-}
+};
 
-// export const HomeContainer = connect(
-//   mapStateToProps,
-//   null
-//  )(Home);
-// //  export default HomeContainer;
+const mapDispatchToProps = dispatch => {
+  return {
+    counting: () => dispatch({type: "ADD_COUNT"}), 
+    stateUpdate: newState => dispatch({ type: "UPDATE_STATE", state: newState })
+  }
+};
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -20,7 +20,6 @@ class SendFunds extends Component {
 
     this.state = {
       account: Cookies.get('name'),
-      network: Cookies.get('network') || props.network
     }
   }
 
@@ -47,7 +46,6 @@ class SendFunds extends Component {
         private_key.toString(),
         Cookies.get('pkh').toString(),
         Cookies.get('storeType').toString(),
-        this.state.network,
         toAccount.toString(),
         parseInt(amount)
       )

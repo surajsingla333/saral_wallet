@@ -46,8 +46,9 @@ class Header extends Component {
     console.log(e.target);
 
     var inThirtyMinutes = new Date(new Date().getTime() + 30 * 60 * 1000);
+    var stored = JSON.parse(localStorage.getItem('DATA'));
 
-    var changedAccount = this.props.getLocalStorage.accounts[this.props.getLocalStorage.listAccountsNames.indexOf(e.target.value)];
+    var changedAccount = stored.accounts[stored.listAccountsNames.indexOf(e.target.value)];
 
     var p = Cookies.get("password");
     var pkh = decryptKeys(changedAccount.pkh, p);
@@ -72,14 +73,19 @@ class Header extends Component {
     });
 
 
+    console.log("UPDATING HOME FROM HEADER");
+    this.props.updateHome();
+  
   }
 
   render() {
 
     var listOfAccounts = [];
     
-    if (this.props.getLocalStorage) {
-      var accounts = this.props.getLocalStorage.listAccountsNames;
+    var storage = JSON.parse(localStorage.getItem('DATA'));
+
+    if (storage) {
+      var accounts = storage.listAccountsNames;
 
       listOfAccounts = accounts.map((account, key) =>
 
@@ -116,8 +122,7 @@ class Header extends Component {
               <Form onChange={this.onRadioChange.bind(this)}>
                 <Form.Group controlId="exampleForm.SelectCustomSizeSm">
                   <Form.Control as="select" value={Cookies.get("network")} size="sm" custom>
-                    <option value="https://tezos-dev.cryptonomic-infra.tech:443">Tezos Dev</option>
-                    <option value="https://conseil-dev.cryptonomic-infra.tech:443">Conseil Dev</option>
+                    <option value="carthagenet">Carthagenet TestNet</option>
                   </Form.Control>
                 </Form.Group>
               </Form>
@@ -159,9 +164,9 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    changeNetwork: (newNetwork) => dispatch({ type: "CHANGE_NETWORK", state: newNetwork })
+    changeNetwork: newNetwork => dispatch({ type: "CHANGE_NETWORK", state: newNetwork })
   }
 }
 

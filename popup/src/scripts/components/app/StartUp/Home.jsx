@@ -44,6 +44,11 @@ class Home extends Component {
         balance: res.balance / 10 ** 6
       })
     }, 500)
+
+    this.setState({
+      option: null,
+      update: this.props.update,
+    })
   }
 
   // componentWillMount() {
@@ -66,7 +71,8 @@ class Home extends Component {
     console.log('IN SETTING BASE')
 
     this.setState({
-      option: null
+      option: null,
+      update: this.props.update,
     })
   }
 
@@ -102,9 +108,12 @@ class Home extends Component {
         <div>
           <Card style={{ margin: '20px' }}>
             <Card.Body>
-              <Card.Title>NAME : {Cookies.get('name')}</Card.Title>
+              <Card.Title>{Cookies.get('name')}</Card.Title>
               <Card.Subtitle className='mb-2 text-muted'>
                 {Cookies.get('pkh')}
+              </Card.Subtitle>
+              <Card.Subtitle className='mb-2 text-muted'>
+                {this.state.balance}
               </Card.Subtitle>
               <Card.Text>
                 {/* <h2>{this.props.balance}</h2> */}
@@ -146,7 +155,9 @@ class Home extends Component {
 
   getActivate () {
     var stored = JSON.parse(localStorage.getItem('DATA'))
-    if (
+
+    console.log("ACTIVATION HOME", stored);
+    if(stored){if (
       !stored.accounts[stored.listAccountsNames.indexOf(Cookies.get('name'))]
         .activated
     ) {
@@ -168,7 +179,7 @@ class Home extends Component {
 
     else {
       return(<Row></Row>)
-    }
+    }}
   }
 
   renderOption (option) {
@@ -197,7 +208,8 @@ const mapStateToProps = state => {
     pkh: state.saveWallet.pkh,
     mnemonic: state.saveWallet.mnemonic,
     storeType: state.saveWallet.storeType,
-    hashArray: state.saveWallet.hashArray
+    hashArray: state.saveWallet.hashArray,
+    update: state.updateState.update,
   }
 }
 
@@ -207,5 +219,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
-7
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

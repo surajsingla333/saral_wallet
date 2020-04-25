@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { unlockFundraiserIdentity } from '../../../../../../API/src/generatefromMnemonic/account';
 import { calling } from '../../../../../../API/src/TESTING/send';
 import { encryptKeys } from '../../../../../../API/src/encryption/encryptAES';
-import Body from '../Body';
+import Home from '../StartUp/Home';
 import Cookies from 'js-cookie';
 
 
@@ -193,7 +193,7 @@ class AddAccount extends Component {
       this.state.gotoBody = false;
       console.log("GOING TO PASWORD")
       return (
-        <Body />
+        <Home />
       )
       // alert("WRONG JSON FILE");
     }
