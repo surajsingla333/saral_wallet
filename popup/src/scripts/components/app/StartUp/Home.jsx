@@ -74,6 +74,7 @@ class Home extends Component {
       option: null,
       update: this.props.update,
     })
+    this.props.sendAccount(Cookies.get('pkh'));
   }
 
   render () {
@@ -215,7 +216,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    makeWallet: newState => dispatch({ type: 'SAVE_FILE', state: newState })
+    makeWallet: newState => dispatch({ type: 'SAVE_FILE', state: newState }),
+    sendAccount: newState => dispatch({type: 'SEND_ACCOUNT', state: newState }),
   }
 }
 

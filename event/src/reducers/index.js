@@ -11,6 +11,7 @@ import reveal from './revealStatus';
 import saveWallet from './storeWallet';
 import changeBody from './changeBody';
 import _updateState from './_updateState';
+import sendToContent from './sendToContent';
 
 
 export default combineReducers({
@@ -24,5 +25,6 @@ export default combineReducers({
   reveal: reveal,
   saveWallet: saveWallet,
   changeBody: changeBody,
-  updateState: _updateState
+  updateState: _updateState,
+  sendToContent: sendToContent,
 });

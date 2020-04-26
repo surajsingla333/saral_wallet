@@ -26,11 +26,11 @@ class App extends Component {
       var listAttributes1 = await listAttributes()
       var listAttributeValues1 = await listAttributeValues()
 
-      console.log('GET VALUE PLATFORMS', listPlatforms1)
-      console.log('GET VALUE NETWORKS', listNetworks1)
-      console.log('GET VALUE ENTITIES', listEntities1)
-      console.log('GET VALUE ENTITIES-OPERATIONS', listAttributes1)
-      console.log('GET VALUE ENTITIES-OPERATIONS-KIND', listAttributeValues1)
+      // console.log('GET VALUE PLATFORMS', listPlatforms1)
+      // console.log('GET VALUE NETWORKS', listNetworks1)
+      // console.log('GET VALUE ENTITIES', listEntities1)
+      // console.log('GET VALUE ENTITIES-OPERATIONS', listAttributes1)
+      // console.log('GET VALUE ENTITIES-OPERATIONS-KIND', listAttributeValues1)
 
       this.setState({
         listPlatforms1,
@@ -40,6 +40,9 @@ class App extends Component {
         listAttributeValues1
       })
     }, 200)
+    this.setState({
+      acc: this.props.currentAccount,
+    })
   }
 
   componentDidMount () {
@@ -50,6 +53,9 @@ class App extends Component {
     //     type: 'ADD_COUNT'
     //   })
     // })
+    console.log(this.props);
+    console.log(this.state);
+    alert("PKH", Cookies.get('pkh'))
 
     document.addEventListener('my_event', (e) => {
       alert('PRINT')
@@ -59,6 +65,7 @@ class App extends Component {
 
     var VAL = this.state.value;
 
+    alert(this.state.acc);
     var elt = document.createElement('script')
     elt.innerHTML = `window.tezos = {
       bar:function(work) {
@@ -67,7 +74,7 @@ class App extends Component {
         document.dispatchEvent(event);
       }, 
       isTezos: true,
-      account: ` + JSON.stringify(Cookies.get('name')) + `,
+      account: ` + JSON.stringify(this.props.currentAccount) + `,
       value:` + JSON.stringify(this.state.value) + `
     };`
     document.head.appendChild(elt)
@@ -84,6 +91,7 @@ class App extends Component {
       <div>
         {Cookies.get("name")};
         <h1>Count: {this.props.count}</h1>
+        <h1>Account: {this.props.currentAccount}</h1>
       </div>
     )
   }
@@ -91,7 +99,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    count: state.count.count
+    count: state.count.count,
+    currentAccount: state.sendToContent.currentAccount,
   }
 }
 

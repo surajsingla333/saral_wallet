@@ -26,7 +26,8 @@ class App extends Component {
       bodyContent: true,
       headMenu: false,
       headerMenuFundAcc: false,
-      update: false
+      update: false,
+      pkh: Cookies.get('pkh'),
     }
   }
 
@@ -36,6 +37,8 @@ class App extends Component {
     document.addEventListener('click', () => {
       this.props.counting();
     });
+
+    this.props.sendAccount(this.state);
 
     console.log('PROPS IN APP.jsx', this.props)
 
@@ -201,6 +204,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    sendAccount: newState => dispatch({type: 'SEND_ACCOUNT', state: newState }),
     counting: () => dispatch({type: "ADD_COUNT"}), 
     stateUpdate: newState => dispatch({ type: "UPDATE_STATE", state: newState })
   }
