@@ -9,7 +9,7 @@ import { calling } from '../../../../../../API/src/TESTING/send'
 import * as Signups from '../Registration/index'
 
 class Signup extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -17,7 +17,7 @@ class Signup extends Component {
     }
   }
 
-  render () {
+  render() {
     console.log('STATE', this.state.option)
 
     return (
@@ -28,7 +28,7 @@ class Signup extends Component {
     )
   }
 
-  card () {
+  card() {
     if (!this.state.option) {
       return (
         <Card style={{ margin: '20px', textAlign: 'center' }}>
@@ -101,7 +101,7 @@ class Signup extends Component {
     }
   }
 
-  renderOption (option) {
+  renderOption(option) {
     if (!option) {
       return <div></div>
     }

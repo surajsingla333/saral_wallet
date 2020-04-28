@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import { Form, Card, Button, Container, Row, Col } from 'react-bootstrap';
-
+import { Form, Card, Button, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { initAccount } from '../../../../../../API/src/registration/loadWallet';
-import { calling } from '../../../../../../API/src/TESTING/send';
-
 import { checkHash } from '../../../../../../API/src/encryption/encryptBcrypt';
 import { decryptKeys } from '../../../../../../API/src/encryption/decryptAES';
 import Home from './Home';
-
-import * as Signups from '../Registration/index';
-
 import Cookies from 'js-cookie';
-
 
 class Login extends Component {
 
@@ -58,9 +51,6 @@ class Login extends Component {
 
     console.log("STAE", this.state);
     //  
-
-
-    calling();
 
     console.log(this.state.result);
     // let stored = localStorage.getItem("USER WALLET");
@@ -138,10 +128,10 @@ class Login extends Component {
 
     return (
       <div>
-        <Card style={{ width: '18rem' }}>
+        <Card style={{ margin: '20px', textAlign: 'center' }}>
           <Card.Body>
             <Card.Title>Saral Wallet</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">Choose Registration</Card.Subtitle>
+            <Card.Subtitle className="mb-2 text-muted">Login</Card.Subtitle>
             <Card.Text>
 
               <Container>
@@ -164,40 +154,6 @@ class Login extends Component {
       </div>
     );
   }
-
-  // card() {
-  //   return (
-  //     <Card style={{ width: '18rem' }}>
-  //       <Card.Body>
-  //         <Card.Title>Saral Wallet</Card.Title>
-  //         <Card.Subtitle className="mb-2 text-muted">Choose Registration</Card.Subtitle>
-  //         <Card.Text>
-
-  //           <Form onSubmit={this.login.bind(this)}>
-  //             <Form.Group controlId="input">
-  //               <Form.Label>Enter your password</Form.Label>
-  //               <Form.Control type="password" ref="pass" placeholder="Your password" />
-  //             </Form.Group>
-
-  //             <Button variant="primary" type="submit">
-  //               Submit
-  //               </Button>
-
-  //           </Form>
-  //         </Card.Text>
-  //       </Card.Body>
-  //     </Card>
-  //   );
-  // }
-
-  // renderOption(option) {
-  //   if (!option) {
-  //     return <div></div>
-  //   }
-  //   const Signup = Signups[option];
-
-  //   return <Signup />
-  // }
 }
 
 const mapStateToProps = (state) => {

@@ -55,10 +55,10 @@ class App extends Component {
     // })
     console.log(this.props);
     console.log(this.state);
-    alert("PKH", Cookies.get('pkh'))
+    // alert("PKH", Cookies.get('pkh'))
 
     document.addEventListener('my_event', (e) => {
-      alert('PRINT')
+      // alert('PRINT')
       console.log(e);
       this.callEvent(e.detail);
     })
@@ -83,15 +83,15 @@ class App extends Component {
   callEvent (v) {
     console.log("GOT DATA", v)
     console.log('EVENT Call')
-    alert('SECOND ALERT')
+    // alert('SECOND ALERT')
   }
 
   render () {
     return (
       <div>
-        {Cookies.get("name")};
+        {/* {Cookies.get("name")};
         <h1>Count: {this.props.count}</h1>
-        <h1>Account: {this.props.currentAccount}</h1>
+        <h1>Account: {this.props.currentAccount}</h1> */}
       </div>
     )
   }
