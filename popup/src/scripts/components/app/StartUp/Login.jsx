@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Card, Button, Container, Row } from 'react-bootstrap';
+import { Form, Card, Button, Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { initAccount } from '../../../../../../API/src/registration/loadWallet';
@@ -136,6 +136,7 @@ class Login extends Component {
 
               <Container>
                 <Row>
+                  <Col>
                   <Form onSubmit={this.login.bind(this)}>
                     <Form.Group controlId="input">
                       <Form.Label>Enter your password</Form.Label>
@@ -146,6 +147,7 @@ class Login extends Component {
                       Submit
                 </Button>
                   </Form>
+                  </Col>
                 </Row>
               </Container>
             </Card.Text>

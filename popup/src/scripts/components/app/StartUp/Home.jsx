@@ -35,21 +35,21 @@ class Home extends Component {
     }
   }
 
-  componentWillMount () {
-    setTimeout(async () => {
-      var res = await accountBalance(Cookies.get('pkh'))
-      console.log('ACCOUNT BALANCE: ', res)
+  // componentWillMount () {
+  //   setTimeout(async () => {
+  //     var res = await accountBalance(Cookies.get('pkh'))
+  //     console.log('ACCOUNT BALANCE: ', res)
 
-      this.setState({
-        balance: res.balance / 10 ** 6
-      })
-    }, 500)
+  //     this.setState({
+  //       balance: res.balance / 10 ** 6
+  //     })
+  //   }, 500)
 
-    this.setState({
-      option: null,
-      update: this.props.update,
-    })
-  }
+  //   this.setState({
+  //     option: null,
+  //     update: this.props.update,
+  //   })
+  // }
 
   // componentWillMount() {
   //   let stored = localStorage.getItem("USER WALLET");
@@ -64,7 +64,20 @@ class Home extends Component {
   // }
 
   componentDidMount () {
-    console.log('PROPS IN HOME', this.props)
+    console.log('PROPS IN HOME', this.props);
+    setTimeout(async () => {
+      var res = await accountBalance(Cookies.get('pkh'))
+      console.log('ACCOUNT BALANCE: ', res)
+
+      this.setState({
+        balance: res.balance / 10 ** 6
+      })
+    }, 500)
+
+    this.setState({
+      option: null,
+      update: this.props.update,
+    })
   }
 
   settingHomeBase () {
@@ -107,20 +120,21 @@ class Home extends Component {
     if (!this.state.option) {
       return (
         <div>
-          <Card style={{ margin: '20px' }}>
+          <Card style={{ margin: '20px', textAlign: 'center' }}>
             <Card.Body>
               <Card.Title>{Cookies.get('name')}</Card.Title>
               <Card.Subtitle className='mb-2 text-muted'>
                 {Cookies.get('pkh')}
               </Card.Subtitle>
               <Card.Subtitle className='mb-2 text-muted'>
+                {/* {this.getBalance()} */}
                 {this.state.balance}
               </Card.Subtitle>
               <Card.Text>
                 {/* <h2>{this.props.balance}</h2> */}
 
                 <Container>
-                  <Row>
+                  <Row style={{margin:'5px'}}>
                     <Col>
                       <Button
                         variant='primary'
@@ -132,8 +146,10 @@ class Home extends Component {
                       </Button>
                     </Col>
                   </Row>
+
                   {this.getActivate()}
-                  <Row>
+
+                  <Row style={{margin:'5px'}}>
                     <Col>
                       <Button
                         variant='primary'
@@ -163,7 +179,7 @@ class Home extends Component {
         .activated
     ) {
       return (
-        <Row>
+        <Row style={{margin:'5px'}}>
           <Col>
             <Button
               variant='primary'

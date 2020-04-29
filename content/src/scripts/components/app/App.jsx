@@ -65,7 +65,7 @@ class App extends Component {
 
     var VAL = this.state.value;
 
-    alert(this.state.acc);
+    // alert(this.state.acc);
     var elt = document.createElement('script')
     elt.innerHTML = `window.tezos = {
       bar:function(work) {

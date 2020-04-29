@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "RCR",
-  "description": "React, Chrome, and Redux example",
-  "version": "0.0.0.1",
+  "name": "Saral Wallet",
+  "description": "Browser Extension Wallet for Tezos",
+  "version": "0.0.1",
   "background": {
     "scripts": [
       "event.js"
@@ -10,7 +10,7 @@
     "persistent": true
   },
   "browser_action": {
-    "default_title": "RCR Example",
+    "default_title": "Saral Wallet",
     "default_popup": "popup.html"
   },
   "permissions": [
