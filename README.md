@@ -27,15 +27,15 @@ To install the extension run the following commands on your terminal or cmd:
 > npm install
 > npm start
 
-Then goto, Google Chrome.
-Write `chrome://extensions/` on the address bar.
-Turn on the developer mode.
-Click on `load unpacked` available on top left.
+Then goto, Google Chrome.\
+Write `chrome://extensions/` on the address bar.\
+Turn on the developer mode.\
+Click on `load unpacked` available on top left.\
 Select the `build` folder on the popup window and click ok.
 
 You will see the extension on your browser.
 
-Alternatively, you can download the `build.zip` file from this repository only. Click [here](https://github.com/surajsingla333/saral_wallet/raw/master/build.zip) to download.
+Alternatively, you can download the `build.zip` file from this repository only. Click [here](https://github.com/surajsingla333/saral_wallet/raw/master/build.zip) to download.\
 Unzip the downloaded file and follow the above steps in Google Chrome to install the extension.
 
 ## Images
@@ -56,8 +56,8 @@ Below we have explained about the registration process, usage and security conce
 
 
 ### Registration
-There are multiple options available for the users to register their addresses/accounts and use them on the wallet.
-The users can add their fundraiser accounts or generate a completely new account with new Private-public key pairs.
+There are multiple options available for the users to register their addresses/accounts and use them on the wallet.\
+The users can add their fundraiser accounts or generate a completely new account with new Private-public key pairs.\
 The users will be able to login to the extension using their password which they will set at the time of registration.
 
 ### Usage
@@ -68,8 +68,8 @@ If users are registering using fundraiser address, they will have option to add 
 
 The users can add delegation of their addresses if they want. 
 
-The wallet sends a `windows.tezos` element at the current webpage, which the users can access in their dApps. 
-For example: 
+The wallet sends a `windows.tezos` element at the current webpage, which the users can access in their dApps.\
+For example:\
   To access the current account i.e., address currently active in the wallet, the users/developers can use `windows.tezos.account` and they will receive the current address/Public Key Hash (pkh)
 
   Currently available functions in `windows.tezos` are:
@@ -83,7 +83,7 @@ For example:
   ```
 
 ### Security
-All of the users details will be stored in a secured extension environment only and no data is stored on servers. This will ensure that the data is not exposed online and users will have complete control over their private keys even as they use this extension.
+All of the users details will be stored in a secured extension environment only and no data is stored on servers. This will ensure that the data is not exposed online and users will have complete control over their private keys even as they use this extension.\
 Users will only have one way to retrieve their account, which is by using mnemonic key. If the user loose their mnemonic key, they will lost all the stored funds as well and that's why users will need to secure their wallet mnemonic.
 
 The private keys are encrypted using the user's password so as to protect the wallet from any offline attacks and the user password itself is securely hashed and only the hashes are matched to confirm the login. If the user forgets his password, he will be required to use the wallet mnemonic to reset the password.
