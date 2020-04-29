@@ -22,7 +22,7 @@ The extension is built using [this](https://github.com/tshaddix/webext-redux-exa
 
 To install the extension run the following commands on your terminal or cmd:
 
-> git clone https://github.com/surajsingla333/saral_wallet.git\
+> git clone https://github.com/surajsingla333/saral_wallet.git \
 > cd saral_wallet\
 > npm install\
 > npm start
