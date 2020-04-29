@@ -40,7 +40,17 @@ Unzip the downloaded file and follow the above steps in Google Chrome to install
 
 ## Images
 
-[](images/dashboard.png)
+<img src='images/registration.png' height="250px">
+<img src='images/jsonFileRegistration.png' height="250px">
+<img src='images/setupPassword.png' height="250px">
+<img src='images/dashboard.png' height="250px">
+<img src='images/login.png' height="250px">
+<img src='images/sendFunds.png' height="250px">
+
+
+###### This is a basic UI built for tezos hackathon, will be updated regularly to provide the best user experience.
+
+Watch the working of the extension on [youtube](https://www.youtube.com/watch?v=Bp7vjTxhAOo).
 
 
 ## Details
