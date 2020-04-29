@@ -18,8 +18,32 @@ Cryptonomic offers an infrastructure service - [Nautilus Cloud](https://nautilus
 
 The extension is built using [this](https://github.com/tshaddix/webext-redux-examples/tree/master/clicker-key) boiler-plate code for ReactJS for Chrome extensions.
 
+## Installation
 
-##Details
+To install the extension run the following commands on your terminal or cmd:
+
+> git clone https://github.com/surajsingla333/saral_wallet.git
+> cd saral_wallet
+> npm install
+> npm start
+
+Then goto, Google Chrome.
+Write `chrome://extensions/` on the address bar.
+Turn on the developer mode.
+Click on `load unpacked` available on top left.
+Select the `build` folder on the popup window and click ok.
+
+You will see the extension on your browser.
+
+Alternatively, you can download the `build.zip` file from this repository only. Click [here](https://github.com/surajsingla333/saral_wallet/raw/master/build.zip) to download.
+Unzip the downloaded file and follow the above steps in Google Chrome to install the extension.
+
+## Images
+
+[](images/dashboard.png)
+
+
+## Details
 Below we have explained about the registration process, usage and security concerns related to the extension. 
 
 
