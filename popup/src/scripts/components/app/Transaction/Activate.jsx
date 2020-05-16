@@ -86,7 +86,7 @@ class Activate extends Component {
           <Card style={{ width: '18rem', margin: '20px' }}>
             <Card.Body>
               <Card.Subtitle className='mb-2 text-muted'>
-                Send Amount
+                Activation
               </Card.Subtitle>
               <Card.Text>
                 <Form onSubmit={this.activate.bind(this)}>
@@ -94,7 +94,7 @@ class Activate extends Component {
                     <Form.Label>Secret</Form.Label>
                     <Form.Control
                       type='text'
-                      placeholder='Enter fundraiser secret'
+                      placeholder='Enter fundraiser wallet secret'
                       ref='secret'
                     />
                   </Form.Group>

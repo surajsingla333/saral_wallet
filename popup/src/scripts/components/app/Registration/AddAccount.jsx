@@ -22,7 +22,8 @@ class AddAccount extends Component {
       private: "",
       pkh: "",
       mnemonic: "",
-      gotoBody: false
+      gotoBody: false,
+      DATA: JSON.parse(localStorage.getItem("DATA"))
     }
   }
 
@@ -108,6 +109,7 @@ class AddAccount extends Component {
         this.state.private = priv;
         this.state.pkh = pkh2;
         this.state.mnemonic = '';
+        this.state.activated = true;
         this.state.storeType = result.storeType;
 
 
@@ -135,7 +137,7 @@ class AddAccount extends Component {
         Cookies.set("privateKey", priv, {
           expires: inThirtyMinutes
         });
-        Cookies.set("name", `ACCOUNT ${(this.props.data.listAccountsNames.length) + 1}`, {
+        Cookies.set("name", `ACCOUNT ${(this.state.DATA.listAccountsNames.length) + 1}`, {
           expires: inThirtyMinutes
         });
         Cookies.set("storeType", result.storeType, {
@@ -186,7 +188,7 @@ class AddAccount extends Component {
 
     else if (this.state.gotoBody === true) {
       this.state.gotoBody = false;
-      console.log("GOING TO PASWORD")
+      console.log("GOING TO PASSWORD")
       return (
         <Body />
       )

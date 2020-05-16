@@ -83,7 +83,8 @@ class Mnemonic extends Component {
           pkh: result.publicKeyHash,
           mnemonic: k.toString(),
           storeType: result.storeType,
-          gotoPassword: true
+          gotoPassword: true,
+          activated: true
         })
 
         // this.state.public = result.publicKey;

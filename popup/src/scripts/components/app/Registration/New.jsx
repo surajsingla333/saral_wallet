@@ -103,6 +103,7 @@ class New extends Component {
           mnemonic: result.mnemonic,
           storeType: result.storeType,
           gotoPassword: true,
+          activated: true
         })
         // this.state.public = result.publicKey;
         // this.state.private = result.privateKey;

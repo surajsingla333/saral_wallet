@@ -30,8 +30,9 @@ class SendFunds extends Component {
   send (e) {
     e.preventDefault()
 
-    var toAccount = this.refs.to.value
-    var amount = this.refs.value.value
+    var toAccount = this.refs.to.value;
+    var am = this.refs.value.value;
+    var amount = am * 10**6;
 
     var pass = Cookies.get('password')
 
@@ -83,7 +84,7 @@ class SendFunds extends Component {
           <Card style={{ width: '18rem', margin: '20px' }}>
             <Card.Body>
               <Card.Subtitle className='mb-2 text-muted'>
-                Send Amount
+                Send Amount (Updated amount will be reflected after txn confirmation)
               </Card.Subtitle>
               <Card.Text>
                 <Form onSubmit={this.send.bind(this)}>
@@ -91,15 +92,15 @@ class SendFunds extends Component {
                     <Form.Label>Receiver</Form.Label>
                     <Form.Control
                       type='text'
-                      placeholder='Enter fundraiser secret'
+                      placeholder='Enter Receiver PKH'
                       ref='to'
                     />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Amount</Form.Label>
                     <Form.Control
-                      type='number'
-                      placeholder='Enter fundraiser secret'
+                      type='integer'
+                      placeholder='Enter tez to send'
                       ref='value'
                     />
                   </Form.Group>

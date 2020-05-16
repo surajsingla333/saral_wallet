@@ -38,7 +38,7 @@ export default (state = initialState, action) => {
         };
       }
 
-      var stored = JSON.parse(localStorage.getItem("DATA"))
+      var stored = action.state.DATA
 
       var id = `ACCOUNT ${stored.listAccountsNames.length + 1}`;
 

@@ -14,124 +14,139 @@ import Home from '../StartUp/Home';
 
 
 class Delegate extends Component {
-  constructor (props) {
-    super(props)
+    constructor(props) {
+        super(props)
 
-    this.state = {
-      account: Cookies.get('name'),
-      network: Cookies.get('network') || props.network
+        this.state = {
+            account: Cookies.get('name'),
+            network: Cookies.get('network') || props.network
+        }
     }
-  }
 
-  componentDidMount () {
-    console.log('IN ACTIVATE PROPS', this.props)
-  }
-
-  activate (e) {
-    e.preventDefault()
-
-    var delegateAdd = this.refs.delegateAdd.value
-    var pass = Cookies.get('password')
-
-    var public_key = decryptKeys(Cookies.get('publicKey'), pass)
-    var private_key = decryptKeys(Cookies.get('privateKey'), pass)
-
-    console.log("GETTING DATA", delegateAdd, pass, public_key, private_key)
-
-    console.log("STATE ACTIVE BEFORE ACTIVATION", this.state);
-
-    setTimeout(async () => {
-      var delegated = await delegateAccount(
-        public_key,
-        private_key,
-        Cookies.get('pkh'),
-        Cookies.get('storeType')
-      )
-
-      console.log('RETURN ACTIVATION RES', delegated)
-
-      // if (delegated) {
-      this.state.delegated = delegated;
-
-      console.log("STATE ACTIVE AFTER ACTIVATION", this.state);
-
-      // this.props.changeActivationStatus(this.state);
-      this.setState({
-        changeState: true,
-      })
-
-    }, 200)
-
-    // }
-    // else {
-    // console.log("Error In Activation");
-    // this.setState({
-    // activated: false
-    // })
-    // }
-  }
-
-  render () {
-    if(this.state.changeState){
-      console.log("STATE CHANGED");
-      this.state.changeState = false
-      return(<Home />)
+    componentDidMount() {
+        console.log('IN ACTIVATE PROPS', this.props)
     }
-    return (
-      <Container>
-        <Row>
-          <Card style={{ width: '18rem', margin: '20px' }}>
-            <Card.Body>
-              <Card.Subtitle className='mb-2 text-muted'>
-                Delegate Account
+
+    activate(e) {
+        e.preventDefault()
+
+        var delegateAdd = this.refs.delegateAdd.value
+        var pass = Cookies.get('password')
+
+        var public_key = decryptKeys(Cookies.get('publicKey'), pass)
+        var private_key = decryptKeys(Cookies.get('privateKey'), pass)
+
+        console.log("GETTING DATA", delegateAdd, pass, public_key, private_key)
+
+        console.log("STATE ACTIVE BEFORE ACTIVATION", this.state);
+
+        setTimeout(async () => {
+            if (!delegateAdd) {
+                var delegated = await delegateAccount(
+                    public_key,
+                    private_key,
+                    Cookies.get('pkh'),
+                    Cookies.get('storeType')
+                )
+            } else {
+                var delegated = await delegateAccount(
+                    public_key,
+                    private_key,
+                    Cookies.get('pkh'),
+                    Cookies.get('storeType'),
+                    delegateAdd.toString()
+                )
+            }
+
+            console.log('RETURN ACTIVATION RES', delegated)
+
+            // if (delegated) {
+            this.state.delegated = delegated;
+
+            console.log("STATE ACTIVE AFTER ACTIVATION", this.state);
+
+            // this.props.changeActivationStatus(this.state);
+            this.setState({
+                changeState: true,
+            })
+
+        }, 200)
+
+        // }
+        // else {
+        // console.log("Error In Activation");
+        // this.setState({
+        // activated: false
+        // })
+        // }
+    }
+
+    render() {
+        if (this.state.changeState) {
+            console.log("STATE CHANGED");
+            this.state.changeState = false
+            return (<Home />)
+        }
+        return (
+            <Container>
+                <Row>
+                    <p>Default Delegation Address: tz1LhS2WFCinpwUTdUb991ocL2D9Uk6FJGJK</p>
+                    <p>Delegation Amount: Full wallet balance</p>
+                    <p>Transaction fee: 10000 tez</p>
+                </Row>
+                <Row>
+                    <Card style={{ width: '18rem', margin: '20px' }}>
+                        <Card.Body>
+                            <Card.Subtitle className='mb-2 text-muted'>
+                                Delegate Account
               </Card.Subtitle>
-              <Card.Text>
-                <Form onSubmit={this.activate.bind(this)}>
-                  <Form.Group controlId='formBasicEmail'>
-                    <Form.Label>Delegate Address</Form.Label>
-                    <Form.Control
-                      type='text'
-                      placeholder='Enter fundraiser secret'
-                      ref='delegateAdd'
-                    />
-                  </Form.Group>
-                  <Button
-                    type='submit'
-                    variant='primary'
-                    ref='method'
-                    value='activate'
-                  >
-                    Activate Account
+                            <Card.Text>
+                                <Form onSubmit={this.activate.bind(this)}>
+                                    <Form.Group controlId='formBasicEmail'>
+                                        <Form.Label>Delegate Address</Form.Label>
+                                        <Form.Control
+                                            type='text'
+                                            placeholder='Enter delegation address'
+                                            ref='delegateAdd'
+                                        />
+                                    </Form.Group>
+                                    <Button
+                                        type='submit'
+                                        variant='primary'
+                                        ref='method'
+                                        value='activate'
+                                    >
+                                        Delegate Account
                   </Button>
-                </Form>
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Row>
-      </Container>
-    )
-  }
+                                </Form>
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                </Row>
+            </Container>
+        )
+    }
 
 }
 const mapStateToProps = state => {
-  return {
-    count: state.count.file,
-    file: state.file.file,
-    public: state.saveWallet.public,
-    private: state.saveWallet.private,
-    pkh: state.saveWallet.pkh,
-    mnemonic: state.saveWallet.mnemonic,
-    storeType: state.saveWallet.storeType,
-    hashArray: state.saveWallet.hashArray,
-    network: state.getNetwork.network
-  }
+    return {
+        count: state.count.file,
+        file: state.file.file,
+        public: state.saveWallet.public,
+        private: state.saveWallet.private,
+        pkh: state.saveWallet.pkh,
+        mnemonic: state.saveWallet.mnemonic,
+        storeType: state.saveWallet.storeType,
+        hashArray: state.saveWallet.hashArray,
+        network: state.getNetwork.network
+    }
 }
 
 const mapDispatchToProps = dispatch => {
-  return {
-    changeActivationStatus: newState =>
-      dispatch({ type: 'ACTIVATE_ACCOUNT', state: newState }),
-  }
+    return {
+        changeActivationStatus: newState =>
+            dispatch({ type: 'ACTIVATE_ACCOUNT', state: newState }),
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Delegate)

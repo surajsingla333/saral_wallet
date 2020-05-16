@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39';
 import {StoreType, TezosMessageUtils, CryptoUtils} from 'conseiljs';
-
+import {activateAccount} from '../activation/activateFundraiser';
 
 export const unlockFundraiserIdentity = async function (mnemonic, email, password, secret="") {
   return await getKeysFromMnemonicAndPassphrase(mnemonic, email + password, StoreType.Fundraiser, secret);
@@ -22,14 +22,15 @@ async function getKeysFromMnemonicAndPassphrase(mnemonic, passphrase, storeType,
 
   else{
     try{
+        console.log("FROM FUND TO ACTIVATE\n", publicKey, "\n", privateKey, "\n", pkh, "\n", storeType, "\n", secret);
       var activated = await activateAccount(publicKey, privateKey, pkh, storeType, secret);
 
       return { publicKey, privateKey, publicKeyHash, seed: '', storeType, activated };
 
     }
 
-    catch{
-      console.log("Error in activation");
+    catch(err){
+      console.log("Error in activation", err);
       return { publicKey, privateKey, publicKeyHash, seed: '', storeType, activated: "Not Activated" };
     }
 

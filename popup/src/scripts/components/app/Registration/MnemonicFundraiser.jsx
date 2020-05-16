@@ -192,7 +192,7 @@ class MnemonicFundraiser extends Component {
                       <Form.Label>Secret (to activate the account)</Form.Label>
                       <Form.Control
                         type='text'
-                        placeholder='Enter password'
+                        placeholder='Enter Fundraiser Secret'
                         ref='secret'
                       />
                     </Form.Group>

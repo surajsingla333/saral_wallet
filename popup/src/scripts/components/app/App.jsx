@@ -28,6 +28,7 @@ class App extends Component {
       headerMenuFundAcc: false,
       update: false,
       pkh: Cookies.get('pkh'),
+      DATA: JSON.parse(localStorage.getItem("DATA")),
     }
   }
 
@@ -131,7 +132,7 @@ class App extends Component {
       console.log('BODY IF FOR HOME')
       this.state.GOTO_HOME = false
 
-      if (this.props.data) {
+      if (this.state.DATA) {
         if (this.state.cookieName) {
           return <Home />
         } else {
@@ -142,7 +143,7 @@ class App extends Component {
       }
     } else if (!this.state.headerMenuAcc && !this.state.headerMenuFundAcc) {
       console.log('BODY IF FOR LOGIN/SIGNUP/HOME')
-      if (this.props.data) {
+      if (this.state.DATA) {
         if (this.state.cookieName) {
           return <Home />
         } else {

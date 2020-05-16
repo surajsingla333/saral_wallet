@@ -23,7 +23,8 @@ class AddAccount extends Component {
       pkh: "",
       mnemonic: "",
       activated: "",
-      gotoBody: false
+      gotoBody: false,
+      DATA: JSON.parse(localStorage.getItem("DATA"))
     }
   }
 
@@ -140,7 +141,7 @@ class AddAccount extends Component {
         Cookies.set("privateKey", priv, {
           expires: inThirtyMinutes
         });
-        Cookies.set("name", `ACCOUNT ${(this.props.data.listAccountsNames.length) + 1}`, {
+        Cookies.set("name", `ACCOUNT ${(this.state.DATA.listAccountsNames.length) + 1}`, {
           expires: inThirtyMinutes
         });
         Cookies.set("storeType", result.storeType, {
@@ -235,7 +236,7 @@ class AddAccount extends Component {
 
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Secret (to activate the account)</Form.Label>
-            <Form.Control type="text" placeholder="Enter password" ref="secret"/>
+            <Form.Control type="text" placeholder="Enter Fundraiser Secret" ref="secret"/>
           </Form.Group>
 
           <Button variant="primary" type="submit">
