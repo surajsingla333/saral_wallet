@@ -9,7 +9,7 @@ export const listPlatforms = async function() {
   try{
 
     const platforms = await ConseilMetadataClient.getPlatforms(conseilServerInfo);
-    console.log(`${inspect(platforms, false, 2, false)}`);
+    // console.log(`${inspect(platforms, false, 2, false)}`);
 
     return platforms;
 

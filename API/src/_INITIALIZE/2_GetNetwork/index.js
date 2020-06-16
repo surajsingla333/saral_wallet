@@ -9,7 +9,7 @@ export const listNetworks = async function() {
   try{
 
     const networks = await ConseilMetadataClient.getNetworks(conseilServerInfo, 'tezos');
-    console.log(`${inspect(networks, false, 2, false)}`);
+    // console.log(`${inspect(networks, false, 2, false)}`);
 
     return networks;
 

@@ -6,7 +6,7 @@ import Body from './Body'
 import Footer from './Footer'
 import Header from './Header'
 import Signup from './StartUp/Signup'
-import Password from './Registration/Password'
+import Call from './Content/Call'
 import Login from './StartUp/Login'
 import Home from './StartUp/Home'
 
@@ -128,7 +128,22 @@ class App extends Component {
   }
 
   body () {
-    if (this.state.GOTO_HOME) {
+
+    if(this.props.functionCall){
+        console.log("FUNCTION CALL", this.props.functionCall);
+        console.log("FUNCTION VALUE", this.props.functionValue);
+        console.log("FUNCTION VALUE NAME", this.props.functionValue.name);
+        console.log("FUNCTION VALUE ADDRESS", this.props.functionValue.address);
+        // this.props.functionCall = false;
+        return (
+          <Call />
+          // <div>
+          //   <h1>FUNCTINO CALLED YEAH</h1>
+          // </div>
+        )
+    }
+
+    else if (this.state.GOTO_HOME) {
       console.log('BODY IF FOR HOME')
       this.state.GOTO_HOME = false
 
@@ -199,6 +214,8 @@ const mapStateToProps = state => {
   return {
     data: state.getLocalStorage,
     count: state.count.count,
+    functionCall: state.functionCall.functionCall,
+    functionValue: state.functionCall.functionValue
     // file: state.file.file
   }
 };

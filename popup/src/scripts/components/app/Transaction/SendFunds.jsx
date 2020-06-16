@@ -51,9 +51,9 @@ class SendFunds extends Component {
         parseInt(amount)
       )
 
-      console.log(activatedRes)
+      console.log("SEND RESULT", activatedRes)
 
-      if (activatedRes) {
+      if (activatedRes.status) {
         this.setState({
           valueSent: true
         })

@@ -15,14 +15,14 @@ export const sendTransaction = async function(_public, _private, _pkh, _storeTyp
       const result = await TezosNodeWriter.sendTransactionOperation(TestNet.TezosNode, keystore, _receiver, _value, _fee, _path);
       console.log(`Injected operation group id ${result.operationGroupID}`);
       if(result.operationGroupID){
-        return true;
+        return {status: true, ID: result.operationGroupID};
       }
       else{
-        return false;
+        return {status: false, ID: result.operationGroupID};
       }
     }
     catch(err){
       console.log("ERRO", err);
-      return false;
+      return {status: false, ID: result.operationGroupID};
     }
 }

@@ -9,7 +9,7 @@ export const listAttributes = async function() {
   try{
 
     const attributes = await ConseilMetadataClient.getAttributes(conseilServerInfo, 'tezos', TestNet.Network, 'operations'); // operations are result.name of 3_getEntities
-    console.log(`${inspect(attributes, false, 2, false)}`);
+    // console.log(`${inspect(attributes, false, 2, false)}`);
 
     return attributes;
 
