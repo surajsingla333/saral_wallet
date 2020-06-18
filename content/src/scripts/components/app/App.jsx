@@ -63,6 +63,11 @@ class App extends Component {
       console.log("GETTING E", e);
       await this.transfer(e.detail);
     })
+    document.addEventListener('invoke', async (e) => {
+      // alert('PRINT')
+      console.log("GETTING E", e);
+      await this.invoke(e.detail);
+    })
 
     // document.addEventListener('my_event_res', async (e) => {
     //   // alert('PRINT')
@@ -73,7 +78,7 @@ class App extends Component {
     // var elt2 = document.createElement('script');
     // elt2.src = chrome.runtime.getURL('script.js');
     // elt2.onload = function () {
-      // this.remove();
+    // this.remove();
     // };
 
 
@@ -107,6 +112,13 @@ class App extends Component {
        document.dispatchEvent(event);
         return "transfer";
       }, 
+      invokeContract:function(data) {
+        console.log("IN FOO:BARR");
+
+        var event = new CustomEvent("invoke", {detail: data});
+       document.dispatchEvent(event);
+        return "invoked";
+      }, 
     };`
 
     document.head.appendChild(elt)
@@ -124,9 +136,9 @@ class App extends Component {
     return "PROMISE";
   }
 
-  async transfer(data){
+  async transfer(data) {
 
-    this.setState({functionType: 'transfer' ,functionValue: data });
+    this.setState({ functionType: 'transfer', functionValue: data });
     console.log("GOT DATA", data);
     console.log('EVENT Call')
     this.props.sendFunction(this.state);
@@ -135,8 +147,28 @@ class App extends Component {
     // return new Promise(function (resolve, reject) {
     var intervalId = setInterval(() => {
       if (this.props.operationID) {
-        var event = new CustomEvent("transferResponse", {detail: this.props.operationID});
-       document.dispatchEvent(event);
+        var event = new CustomEvent("transferResponse", { detail: this.props.operationID });
+        document.dispatchEvent(event);
+        this.props.refreshOperation(this.state);
+        clearInterval(intervalId);
+      }
+    }, 1000);
+
+  }
+
+  async invoke(data) {
+
+    this.setState({ functionType: 'contractInvoke', functionValue: data });
+    console.log("GOT DATA", data);
+    console.log('EVENT Call')
+    this.props.sendFunction(this.state);
+    // await this.props.operationID;
+    // return "VALUE";
+    // return new Promise(function (resolve, reject) {
+    var intervalId = setInterval(() => {
+      if (this.props.operationID) {
+        var event = new CustomEvent("invokeResponse", { detail: this.props.operationID });
+        document.dispatchEvent(event);
         this.props.refreshOperation(this.state);
         clearInterval(intervalId);
       }
@@ -145,7 +177,7 @@ class App extends Component {
   }
 
   async callEvent(v) {
-    this.setState({ functionType: 'message' , functionValue: v });
+    this.setState({ functionType: 'message', functionValue: v });
     console.log("GOT DATA", v)
     console.log('EVENT Call')
     this.props.sendFunction(this.state);
@@ -154,8 +186,8 @@ class App extends Component {
     // return new Promise(function (resolve, reject) {
     var intervalId = setInterval(() => {
       if (this.props.operationID) {
-        var event = new CustomEvent("bar", {detail: this.props.operationID});
-       document.dispatchEvent(event);
+        var event = new CustomEvent("bar", { detail: this.props.operationID });
+        document.dispatchEvent(event);
         this.props.refreshOperation(this.state);
         clearInterval(intervalId);
       }

@@ -18,11 +18,11 @@ export const sendTransaction = async function(_public, _private, _pkh, _storeTyp
         return {status: true, ID: result.operationGroupID};
       }
       else{
-        return {status: false, ID: result.operationGroupID};
+        return {status: false, ID: null};
       }
     }
     catch(err){
       console.log("ERRO", err);
-      return {status: false, ID: result.operationGroupID};
+      return {status: false, ID: null};
     }
 }

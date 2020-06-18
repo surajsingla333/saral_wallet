@@ -18,6 +18,9 @@ import {listEntities} from './_INITIALIZE/3_GetEntities';
 import {listAttributes} from './_INITIALIZE/4_EntityAttributes';
 import {listAttributeValues} from './_INITIALIZE/5_AttributeValue';
 
+import {invokeContract} from './CONTRACT/invokeContract';
+
+
 // import {generateAccount} from './registration/generateWallet';
 // import rootReducer from './reducers/index';
 
