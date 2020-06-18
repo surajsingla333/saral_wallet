@@ -3,6 +3,11 @@
   "name": "Saral Wallet",
   "description": "Browser Extension Wallet for Tezos",
   "version": "0.0.1",
+  "icons": {
+    "16": "./Icons/icon16.png",
+    "48": "./Icons/icon48.png",
+    "128": "./Icons/icon128.png"
+  },
   "background": {
     "scripts": [
       "event.js"
@@ -11,7 +16,8 @@
   },
   "browser_action": {
     "default_title": "Saral Wallet",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "./Icons/icon128.png"
   },
   "permissions": [
     "storage",
