@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Testing Extenstion</title>
+</head>
+
+<body>
+  <h2>Fetching data</h2>
+
+  <button onclick="onAlert()">Getting Alert of accound address</button>
+
+  <input id="name" type="text" placeholder="name" />
+  <input id="sirname" type="text" placeholder="address" />
+  <button onclick="onCall()">Calling Function</button>
+
+  <div>
+    <input id="address" type="text" placeholder="name" />
+    <input id="value" type="text" placeholder="address" />
+    <button onclick="onTransfer()">Transfer Tez</button>
+  </div>
+
+
+  <div>
+    <input id="contractAddress" type="text" placeholder="Contract Address" />
+    <input id="message" type="text" placeholder="Message" />
+    <button onclick="onInvoke()">Invoke Contract</button>
+  </div>
+
+  <div id="event"></div>
+
+
+  <script>
+    setTimeout(async () => {
+
+      let tez = await window.tezos;
+      console.log("INSIDE MY WEBPAGE");
+      // console.log("WEB PAGE", tez.isTezos);
+      console.log("WEB PAGE", tez.isTezos);
+
+      if (tez.isTezos) {
+        console.log("Extension is available")
+      }
+
+    }, 2000);
+
+    const onAlert = () => {
+      console.log("Getting address", window.tezos.account);
+      alert(window.tezos.account);
+    }
+
+    const onCall = () => {
+      let name = document.getElementById("name").value;
+      let address = document.getElementById("sirname").value;
+      let details;
+      // { name: name, address: address }
+      window.tezos.bar({ name: name, address: address })
+
+      document.addEventListener('bar', (e) => {
+        console.log("GETTING E2", e.detail);
+        details = e.detail;
+
+        // create a new div element 
+        var newDiv = document.getElementById("event");
+        console.log("DETAILS", details);
+        // and give it some content 
+        var newContent = document.createTextNode(`Hi there and greetings! ${details}`);
+        // add the text node to the newly created div
+        newDiv.appendChild(newContent);
+
+      });
+
+      console.log("Details from event", details);
+
+      // console.log("Sending bar function (event)", window.tezos.bar({name: name, address: address }));
+      // alret(tez.account);
+    }
+
+    const onTransfer = () => {
+
+      let amount = document.getElementById("value").value;
+      let address = document.getElementById("address").value;
+      let details;
+      // { name: name, address: address }
+      window.tezos.transfer({ address: address, amount: amount })
+
+      document.addEventListener('transferResponse', (e) => {
+        console.log("GETTING E2", e.detail);
+        details = e.detail;
+
+        // create a new div element 
+        // var newDiv = document.getElementById("event");
+        // console.log("DETAILS", details);
+        // // and give it some content 
+        // var newContent = document.createTextNode(`Hi there and greetings! ${details}`);
+        // // add the text node to the newly created div
+        // newDiv.appendChild(newContent);
+
+      });
+
+      // console.log("Details from event", details);
+
+    }
+
+    const onInvoke = () => {
+
+      let message = document.getElementById("message").value;
+      let address = document.getElementById("contractAddress").value;
+      let details;
+      // { name: name, address: address }
+      window.tezos.invokeContract({ addressContract: address, message: message })
+
+      document.addEventListener('invokeResponse', (e) => {
+        console.log("GETTING E2", e.detail);
+        details = e.detail;
+
+        // create a new div element 
+        // var newDiv = document.getElementById("event");
+        // console.log("DETAILS", details);
+        // // and give it some content 
+        // var newContent = document.createTextNode(`Hi there and greetings! ${details}`);
+        // // add the text node to the newly created div
+        // newDiv.appendChild(newContent);
+
+      });
+
+      // console.log("Details from event", details);
+
+    }
+
+  </script>
+</body>
+
+</html>
