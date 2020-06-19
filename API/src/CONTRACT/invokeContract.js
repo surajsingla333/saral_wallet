@@ -1,9 +1,21 @@
-import { TezosNodeWriter, TezosParameterFormat } from 'conseiljs';
+import { TezosConseilClient, TezosNodeReader, TezosNodeWriter, TezosParameterFormat, OperationKindType } from 'conseiljs';
 import { TestNet } from '../../myAPIkey';
+
+
+const conseilServer = {
+  url: TestNet.ConseilNode,
+  apiKey: TestNet.API,
+  network: TestNet.Network
+}
+
+function clearRPCOperationGroupHash(hash) {
+  return hash.replace(/\"/g, '').replace(/\n/, '');
+}
 
 // conseiljs.setLogLevel('debug');
 
-export const invokeContract = async function (_public, _private, _pkh, _storeType, _contractAddress, _entryPoint = '"Cryptonomicon"', _fee = 1500, _path = "") {
+export const invokeContract = async function (_public, _private, _pkh, _storeType, _contractAddress, parameter, entryPoint = '') {
+
   const keystore = {
     publicKey: _public,
     privateKey: _private,
@@ -11,55 +23,117 @@ export const invokeContract = async function (_public, _private, _pkh, _storeTyp
     seed: '',
     storeType: _storeType
   };
-  const contractAddress = _contractAddress;
-  console.log("IN FUN", contractAddress, keystore, "ENTRY", _entryPoint);
+  const address = _contractAddress;
+  const networkBlockTime = 30 + 1;
 
+  console.log(`~~ invokeContract`, "\n", keystore, "\n", address, "\n", _public, "\n", _private, "\n", _pkh, "\n", _storeType, "\n", _contractAddress, "\n", parameter, "\n", entryPoint = '');
   try {
-    console.log("IN TRY", contractAddress, keystore, "ENTRY", _entryPoint);
-    const result = await TezosNodeWriter.sendContractInvocationOperation(TestNet.TezosNode, keystore, contractAddress, 10000, 100000, '', 1000, 100000, '"Cryptonomicon"');
-    console.log(`Injected operation group id ${result.operationGroupID}`);
-    if (result.operationGroupID) {
-      return { status: true, ID: result.operationGroupID };
+    const fee = Number((await TezosConseilClient.getFeeStatistics(conseilServer, conseilServer.network, OperationKindType.Transaction))[0]['high']);
+
+    let storageResult = await TezosNodeReader.getContractStorage(TestNet.TezosNode, address);
+    console.log(`initial storage: ${JSON.stringify(storageResult)}`);
+
+    const { gas, storageCost: freight } = await TezosNodeWriter.testContractInvocationOperation(TestNet.TezosNode, 'main', keystore, address, 10000, fee, 1000, 100000, entryPoint, parameter, TezosParameterFormat.Michelson);
+
+    console.log(`cost: ${JSON.stringify(await TezosNodeWriter.testContractInvocationOperation(TestNet.TezosNode, 'main', keystore, address, 10000, fee, 1000, 100000, entryPoint, parameter, TezosParameterFormat.Michelson))}`)
+    const nodeResult = await TezosNodeWriter.sendContractInvocationOperation(TestNet.TezosNode, keystore, address, 10000, fee, '', freight, gas, entryPoint, parameter, TezosParameterFormat.Michelson);
+
+    const groupid = clearRPCOperationGroupHash(nodeResult.operationGroupID);
+    console.log(`Injected transaction(invocation) operation with ${groupid}`);
+
+    const conseilResult = await TezosConseilClient.awaitOperationConfirmation(conseilServer, conseilServer.network, groupid, 5, networkBlockTime);
+    console.log(`Completed invocation of ${conseilResult.destination}`);
+    storageResult = await TezosNodeReader.getContractStorage(TestNet.TezosNode, address);
+    console.log(`modified storage: ${JSON.stringify(storageResult)}`);
+    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+    if (nodeResult.operationGroupID) {
+      return { status: true, ID: nodeResult.operationGroupID };
     }
     else {
       return { status: false, ID: null };
     }
-
   }
-
-  catch (err) {
-    console.log("IN CATCH", contractAddress, keystore, "ENTRY", _entryPoint);
+  catch(err) {
     console.log("ERRO", err);
     return { status: false, ID: err };
+
   }
 }
 
+
+
+// // import { TezosConseilClient, TezosNodeReader, TezosNodeWriter, TezosParameterFormat, OperationKindType } from 'conseiljs';
+// // import { TestNet } from '../../myAPIkey';
+
 // const conseiljs = require('conseiljs');
-// const tezosNode = 'https://tezos-dev.cryptonomic-infra.tech:443';
 
-// conseiljs.setLogLevel('debug');
-
-// async function invokeContract() {
-//     const keystore = {
-//         publicKey: 'edpkvQtuhdZQmjdjVfaY9Kf4hHfrRJYugaJErkCGvV3ER1S7XWsrrj',
-//         privateKey: 'edskRgu8wHxjwayvnmpLDDijzD3VZDoAH7ZLqJWuG4zg7LbxmSWZWhtkSyM5Uby41rGfsBGk4iPKWHSDniFyCRv3j7YFCknyHH',
-//         publicKeyHash: 'tz1QSHaKpTFhgHLbqinyYRjxD5sLcbfbzhxy',
-//         seed: '',
-//         storeType: conseiljs.StoreType.Fundraiser
-//     };
-//     const contractAddress = 'KT1KA7DqFjShLC4CPtChPX8QtRYECUb99xMY';
-
-
-//     // tezosNode, "tz1QSHaKpTFhgHLbqinyYRjxD5sLcbfbzhxy", keystore, contractAddress, 0, 10000, 10000, 100000, '"Cryptonomicon"', ""
-
-//     console.log("VALUE")
-//     try{
-//     const result = await conseiljs.TezosNodeWriter.sendContractInvocationOperation(tezosNode, keystore, contractAddress, 10000, 100000, '', 10000, 100000, 'Cryptonomicon');
-//     console.log(`Injected operation group id ${result.operationGroupID}`);
-//     }
-//     catch(err){
-//       console.log("ERROR", err);
-//     }
+// const TestNet = {
+//   API: "6d4761a9-4079-4b91-b41a-1ac28f966bdc",
+//   Network: "carthagenet",
+//   TezosNode: "https://tezos-dev.cryptonomic-infra.tech:443",
+//   ConseilNode: "https://conseil-dev.cryptonomic-infra.tech:443",
 // }
 
-// invokeContract();
+
+// const conseilServer = {
+//   url: TestNet.ConseilNode,
+//   apiKey: TestNet.API,
+//   network: TestNet.Network
+// }
+
+// function clearRPCOperationGroupHash(hash) {
+//   return hash.replace(/\"/g, '').replace(/\n/, '');
+// }
+
+// // conseiljs.setLogLevel('debug');
+
+// const invokeContract = async function (_public, _private, _pkh, _storeType, _contractAddress, parameter, entryPoint = '') {
+
+//   const keystore = {
+//     publicKey: _public,
+//     privateKey: _private,
+//     publicKeyHash: _pkh,
+//     seed: '',
+//     storeType: _storeType
+//   };
+//   const address = _contractAddress;
+//   const networkBlockTime = 30 + 1;
+
+//   console.log(`~~ invokeContract`, "\n", keystore, "\n", address, "\n", _public, "\n", _private, "\n", _pkh, "\n", _storeType, "\n", _contractAddress, "\n", parameter, "\n", entryPoint = '');
+//   // console.log(`~~ invokeContract`, "\n", keystore, "\n", address);
+//   try {
+//     const fee = Number((await conseiljs.TezosConseilClient.getFeeStatistics(conseilServer, conseilServer.network, conseiljs.OperationKindType.Transaction))[0]['high']);
+
+//     let storageResult = await conseiljs.TezosNodeReader.getContractStorage(TestNet.TezosNode, address);
+//     console.log(`initial storage: ${JSON.stringify(storageResult)}`);
+
+//     const { gas, storageCost: freight } = await conseiljs.TezosNodeWriter.testContractInvocationOperation(TestNet.TezosNode, 'main', keystore, address, 10000, fee, 1000, 100000, this.entrypoint, parameter, conseiljs.TezosParameterFormat.Michelson);
+
+//     console.log(`cost: ${JSON.stringify(await conseiljs.TezosNodeWriter.testContractInvocationOperation(TestNet.TezosNode, 'main', keystore, address, 10000, fee, 1000, 100000, this.entrypoint, parameter, conseiljs.TezosParameterFormat.Michelson))}`)
+//     const nodeResult = await conseiljs.TezosNodeWriter.sendContractInvocationOperation(TestNet.TezosNode, keystore, address, 10000, fee, '', freight, gas, this.entrypoint, parameter, conseiljs.TezosParameterFormat.Michelson);
+
+//     const groupid = clearRPCOperationGroupHash(nodeResult.operationGroupID);
+//     console.log(`Injected transaction(invocation) operation with ${groupid}`);
+
+//     const conseilResult = await conseiljs.TezosConseilClient.awaitOperationConfirmation(conseilServer, conseilServer.network, groupid, 5, networkBlockTime);
+//     console.log(`Completed invocation of ${conseilResult.destination}`);
+//     storageResult = await conseiljs.TezosNodeReader.getContractStorage(TestNet.TezosNode, address);
+//     console.log(`modified storage: ${JSON.stringify(storageResult)}`);
+//     console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+//     if (nodeResult.operationGroupID) {
+//       return { status: true, ID: nodeResult.operationGroupID };
+//     }
+//     else {
+//       return { status: false, ID: null };
+//     }
+//   }
+//   catch(err){
+//     console.log("ERRO", err);
+//     return { status: false, ID: err };
+
+//   }
+// }
+
+
+// // invokeContract();
+// invokeContract('edpkuZXFLhizuTFpiRATY4vqaRu4xEkNAN627R5VhKXhheUY9fn1ep', 'edskRc75MX2TV41jbk13m3P76quxhUKj3ZUQo5tj8772oCUkm9qvQWnNTejDH634SZoJuH2vjJui7Xej2k2QWcfPZvjEhAPV9D', 'tz1YNd37NWD5PoPYhPFHQWbqUYMLh2AmvVPm', conseiljs.StoreType.Fundraiser, "KT1SCv11t9p57dwfgAaqUcG7doSJE3T1LNQh", '"MANGO"');

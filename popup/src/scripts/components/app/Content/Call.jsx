@@ -99,7 +99,7 @@ export class Call extends Component {
         Cookies.get('pkh').toString(),
         Cookies.get('storeType').toString(),
         toAccount.toString(),
-        message.toString,
+        message.toString(),
       )
 
       console.log("TRANSFER RESULT", activatedRes)
