@@ -136,4 +136,4 @@ export const invokeContract = async function (_public, _private, _pkh, _storeTyp
 
 
 // // invokeContract();
-// invokeContract('edpkuZXFLhizuTFpiRATY4vqaRu4xEkNAN627R5VhKXhheUY9fn1ep', 'edskRc75MX2TV41jbk13m3P76quxhUKj3ZUQo5tj8772oCUkm9qvQWnNTejDH634SZoJuH2vjJui7Xej2k2QWcfPZvjEhAPV9D', 'tz1YNd37NWD5PoPYhPFHQWbqUYMLh2AmvVPm', conseiljs.StoreType.Fundraiser, "KT1SCv11t9p57dwfgAaqUcG7doSJE3T1LNQh", '"MANGO"');
+// invokeContract('edpkuZXFLhizuTFpiRATY4vqaRu4xEkNAN627R5VhKXhheUY9fn1ep', 'edskRc75MX2TV41jbk13m3P76quxhUKj3ZUQo5tj8772oCUkm9qvQWnNTejDH634SZoJuH2vjJui7Xej2k2QWcfPZvjEhAPV9D', 'tz1YNd37NWD5PoPYhPFHQWbqUYMLh2AmvVPm', conseiljs.StoreType.Fundraiser, "KT1SCv11t9p57dwfgAaqUcG7doSJE3T1LNQh", '"MANGO"', '"update"');

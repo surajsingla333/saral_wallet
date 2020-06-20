@@ -135,6 +135,65 @@ export class Call extends Component {
 
   }
 
+  onSendFunctionHandler(e) {
+    e.preventDefault();
+
+    var toAccount = this.props.functionValue.addressContract;
+    var message = `"` + this.props.functionValue.message + `"`;
+    var entryPoint = `"` + this.props.functionValue.entryPoint + `"`;
+
+
+    var pass = Cookies.get('password')
+
+    var public_key = decryptKeys(Cookies.get('publicKey'), pass)
+    var private_key = decryptKeys(Cookies.get('privateKey'), pass)
+
+    console.log(toAccount, message, pass, public_key, private_key, entryPoint)
+
+    setTimeout(async () => {
+      var activatedRes = await invokeContract(
+        public_key.toString(),
+        private_key.toString(),
+        Cookies.get('pkh').toString(),
+        Cookies.get('storeType').toString(),
+        toAccount.toString(),
+        message.toString(),
+        entryPoint.toString()
+      )
+
+      console.log("TRANSFER RESULT", activatedRes)
+
+      if (activatedRes.status) {
+        this.setState({
+          valueSent: true,
+          clicked: true,
+          operationId: activatedRes.ID
+        })
+        this.props.onFunctionCall(this.state);
+      } else {
+        console.log('Error In Activation')
+        if(activatedRes.ID){
+          this.setState({
+            valueSent: false,
+            clicked: true,
+            operationId: activatedRes.ID.toString()
+          })
+        }
+        else {
+          this.setState({
+            valueSent: false,
+            clicked: true,
+            operationId: "Error in transfering funds"
+          })
+        }
+        
+        this.props.onFunctionCall(this.state);
+      }
+
+    }, 1000)
+
+  }
+
   render() {
     if (this.state.clicked) {
       console.log("STATE CHANGED");
@@ -215,12 +274,42 @@ export class Call extends Component {
               </Card.Subtitle>
                   <Card.Text>
                     <Form onSubmit={this.onSendHandler.bind(this)}>
-                      <h1>{this.props.functionValue.addressContract}</h1>
-                      <h1>{this.props.functionValue.message}</h1>
+                      <h2>{this.props.functionValue.addressContract}</h2>
+                      <h2>{this.props.functionValue.message}</h2>
                       <Button
                         type='submit'
                         variant='primary'
                         ref='onSendHandler'
+                      >
+                        Send
+                  </Button>
+                    </Form>
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Row>
+          </Container>
+        )
+      }
+
+      else if (this.props.functionType == 'sendFunction') {
+        return (
+          <Container>
+            <Row>
+              <Card style={{ width: '18rem', margin: '20px' }}>
+                <Card.Body>
+                  <Card.Subtitle className='mb-2 text-muted'>
+                    Function called from WebPage To Invoke Contract Function
+              </Card.Subtitle>
+                  <Card.Text>
+                    <Form onSubmit={this.onSendFunctionHandler.bind(this)}>
+                      <h3>{this.props.functionValue.addressContract}</h3>
+                      <h3>{this.props.functionValue.message}</h3>
+                      <h3>{this.props.functionValue.entryPoint}</h3>
+                      <Button
+                        type='submit'
+                        variant='primary'
+                        ref='onSendFunctionHandler'
                       >
                         Send
                   </Button>

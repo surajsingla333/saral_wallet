@@ -27,6 +27,13 @@
     <button onclick="onInvoke()">Invoke Contract</button>
   </div>
 
+  <div>
+    <input id="contractAddress2" type="text" placeholder="Contract Address" />
+    <input id="param" type="text" placeholder="Param" />
+    <input id="entryPoint" type="text" placeholder="Entry Point" />
+    <button onclick="onSend()">Send Function</button>
+  </div>
+
   <div id="event"></div>
 
 
@@ -111,6 +118,34 @@
       window.tezos.invokeContract({ addressContract: address, message: message })
 
       document.addEventListener('invokeResponse', (e) => {
+        console.log("GETTING E2", e.detail);
+        details = e.detail;
+
+        // create a new div element 
+        // var newDiv = document.getElementById("event");
+        // console.log("DETAILS", details);
+        // // and give it some content 
+        // var newContent = document.createTextNode(`Hi there and greetings! ${details}`);
+        // // add the text node to the newly created div
+        // newDiv.appendChild(newContent);
+
+      });
+
+      // console.log("Details from event", details);
+
+    }
+
+    const onSend = () => {
+
+      let param = document.getElementById("param").value;
+      let address = document.getElementById("contractAddress2").value;
+      let entryPoint = document.getElementById("entryPoint").value;
+      let details;
+      // { name: name, address: address }
+
+      window.tezos.send({ addressContract: address, message: param, entryPoint: entryPoint })
+
+      document.addEventListener('sendResponse', (e) => {
         console.log("GETTING E2", e.detail);
         details = e.detail;
 
